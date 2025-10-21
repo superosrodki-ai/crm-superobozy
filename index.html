@@ -1,68 +1,20 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>CRM SuperObozy – Cloud</title>
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuperObozy — CRM (demo w chmurze)</title>
+  <base href="/" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <div class="app">
-    <header class="app-header">
-      <div class="brand">
-        <span class="material-icons">groups</span>
-        <div>
-          <h1>CRM SuperObozy <span class="pro-badge">Cloud</span></h1>
-          <small>Vercel + Supabase (Mail + Kalendarz)</small>
-        </div>
-      </div>
-      <div class="actions">
-        <a class="btn" href="/dashboard"><span class="material-icons">analytics</span> Dashboard</a>
-        <a class="btn" href="/reservation"><span class="material-icons">event</span> Rezerwacja</a>
-        <a class="btn" href="/offer"><span class="material-icons">mail</span> Wyślij ofertę</a>
-        <button id="themeToggle" class="btn" title="Przełącz motyw"><span class="material-icons">dark_mode</span></button>
-      </div>
-    </header>
-
-    <main class="content">
-      <section class="card">
-        <div class="card-header">
-          <h2><span class="material-icons">list</span> Lista leadów</h2>
-        </div>
-        <div id="info" class="stats">
-          <div class="stat"><div class="v">Subskrypcja kalendarza</div><div class="k"><code>https://TWOJ-PROJEKT.vercel.app/calendar.ics</code></div></div>
-        </div>
-        <div id="leads" class="table"></div>
-      </section>
-    </main>
-  </div>
-  <script>
-    function applyTheme() {
-      const m = localStorage.getItem('crm_theme') ?? 'dark';
-      document.documentElement.dataset.theme = m;
-    }
-    function toggleTheme() {
-      const cur = document.documentElement.dataset.theme;
-      const next = cur === 'dark' ? 'light' : 'dark';
-      document.documentElement.dataset.theme = next;
-      localStorage.setItem('crm_theme', next);
-    }
-    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-    applyTheme();
-
-    async function loadLeads(){
-      const res = await fetch('/api/leads').then(r=>r.json());
-      if(res.ok && res.data && res.data.length){
-        const header = Object.keys(res.data[0]);
-        const thead = `<thead><tr>${header.map(h=>`<th>${h}</th>`).join('')}</tr></thead>`;
-        const tbody = `<tbody>${res.data.map(r=>`<tr>${header.map(h=>`<td>${r[h] ?? ''}</td>`).join('')}</tr>`).join('')}</tbody>`;
-        document.getElementById('leads').innerHTML = `<table>${thead}${tbody}</table>`;
-      } else {
-        document.getElementById('leads').innerHTML = '<p>Brak leadów.</p>';
-      }
-    }
-    loadLeads();
-  </script>
+  <header style="padding: 12px 16px;">
+    <h1 style="margin:0;">🌲 SuperObozy — CRM (demo w chmurze)</h1>
+    <small style="opacity:.75;">Darmowa wersja • Supabase + Vercel</small>
+  </header>
+  <main id="app-root" style="padding: 16px;">
+    <!-- Wklej tutaj swoją obecną zawartość BODY z poprzedniego pliku index.html -->
+  </main>
+  <script src="app.js" defer></script>
 </body>
 </html>
