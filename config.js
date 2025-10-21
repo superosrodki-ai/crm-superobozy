@@ -1,5 +1,4 @@
-// Jeśli zostawisz puste wartości — aplikacja ruszy w trybie DEMO (bez zapisu).
 window.CONFIG = {
-  SUPABASE_URL: "",        // np. "https://twoj-projekt.supabase.co"
-  SUPABASE_ANON_KEY: ""    // klucz ANON z Supabase
+  SUPABASE_URL: "https://TWOJ_PROJEKT.supabase.co",
+  SUPABASE_ANON_KEY: "ey...twój_anon_key..."
 };
