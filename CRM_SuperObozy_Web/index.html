@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SuperObozy CRM — wersja prosta</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h1>🌲 SuperObozy — CRM (demo w chmurze)</h1>
+        <span class="badge">Darmowa wersja • Supabase + Vercel</span>
+      </div>
+
+      <!-- NOWY LEAD -->
+      <div class="card">
+        <h3>➕ Nowy kontakt</h3>
+        <div class="grid2">
+          <div>
+            <label>Źródło</label>
+            <select id="source">
+              <option>Telefon</option><option>Mail</option><option>FB/IG</option><option>Inne</option>
+            </select>
+          </div>
+          <div>
+            <label>Opiekun</label>
+            <input id="owner" placeholder="np. Piotr" />
+          </div>
+          <div>
+            <label>Klub / Szkoła</label>
+            <input id="club" placeholder="np. UKS Orlik" />
+          </div>
+          <div>
+            <label>Osoba</label>
+            <input id="person" placeholder="np. Anna Kowalska" />
+          </div>
+          <div>
+            <label>Telefon</label>
+            <input id="phone" placeholder="+48 600 700 800" />
+          </div>
+          <div>
+            <label>Email</label>
+            <input id="email" placeholder="kontakt@klub.pl" />
+          </div>
+          <div>
+            <label>Dyscyplina</label>
+            <input id="sport" placeholder="np. piłka nożna / judo" />
+          </div>
+          <div>
+            <label>Uczestników</label>
+            <input id="participants" type="number" min="1" step="1" />
+          </div>
+          <div>
+            <label>Zaplecze</label>
+            <input id="facilities" placeholder="np. hala, boisko" />
+          </div>
+          <div>
+            <label>Termin (okno)</label>
+            <input id="term_window" placeholder="np. 15–28 lipca" />
+          </div>
+          <div>
+            <label>Lokalizacja preferowana</label>
+            <input id="location_pref" placeholder="np. zachodniopomorskie / morze" />
+          </div>
+        </div>
+
+        <div style="margin:8px 0;">
+          <label>Zainteresowany campami:</label>
+          <div class="pillbar">
+            <span class="pill"><input type="checkbox" id="camp_jastrowie"> Jastrowie</span>
+            <span class="pill"><input type="checkbox" id="camp_lipka"> Lipka</span>
+            <span class="pill"><input type="checkbox" id="camp_dabki"> Dąbki</span>
+            <span class="pill"><input type="checkbox" id="camp_pobierowo"> Pobierowo</span>
+            <span class="pill"><input type="checkbox" id="camp_rewal"> Rewal</span>
+          </div>
+        </div>
+
+        <div class="grid2">
+          <div>
+            <label>Notatki</label>
+            <textarea id="notes" rows="3"></textarea>
+          </div>
+          <div>
+            <label>Follow-up</label>
+            <select id="followUpDays">
+              <option value="0">— brak —</option>
+              <option value="2">za 2 dni</option>
+              <option value="3" selected>za 3 dni</option>
+              <option value="5">za 5 dni</option>
+              <option value="7">za 7 dni</option>
+            </select>
+            <div class="small">Po utworzeniu możesz od razu otworzyć WhatsApp.</div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; margin-top:10px;">
+          <button id="btnAdd">💾 Zapisz nowy kontakt</button>
+          <button class="wa" id="btnAddAndWA">💾🟢 Zapisz i otwórz WhatsApp</button>
+        </div>
+      </div>
+
+      <!-- LISTA LEADÓW -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3>📋 Leady</h3>
+          <button class="ghost" id="btnReload">🔄 Odśwież listę</button>
+        </div>
+        <table class="table" id="leadTable">
+          <thead>
+            <tr><th>ID</th><th>Klub</th><th>Osoba</th><th>Tel</th><th>Status</th><th>Następny kontakt</th><th class="right">Akcje</th></tr>
+          </thead>
+          <tbody id="leadBody"></tbody>
+        </table>
+        <div class="small">Kliknij w wiersz, aby otworzyć „Kartę klienta”.</div>
+      </div>
+
+      <!-- KARTA KLIENTA -->
+      <div class="card hidden" id="card">
+        <h3>🗂️ Karta klienta</h3>
+        <div id="leadHeader"></div>
+
+        <div style="margin:10px 0;">
+          <div>Status:</div>
+          <div class="pillbar" id="statusBar"></div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin:8px 0;">
+          <button class="wa" id="btnWA">💬 WhatsApp</button>
+          <button class="ghost" id="btnClose">Zamknij kartę</button>
+        </div>
+
+        <h4>Historia</h4>
+        <div id="history"></div>
+
+        <h4 style="margin-top:10px;">Nowa notatka</h4>
+        <textarea id="note" rows="3" placeholder="co ustalone?"></textarea>
+        <div style="display:flex; gap:10px; margin-top:8px; align-items:flex-end;">
+          <div>
+            <label>Follow-up</label>
+            <select id="fuDays">
+              <option value="0">— bez zmian —</option>
+              <option value="2">+2 dni</option>
+              <option value="3">+3 dni</option>
+              <option value="5">+5 dni</option>
+              <option value="7">+7 dni</option>
+            </select>
+          </div>
+          <button id="btnSaveNote">Zapisz do historii</button>
+        </div>
+      </div>
+
+    </div>
+
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
