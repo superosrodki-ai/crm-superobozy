@@ -1,10 +1,12 @@
-Instrukcja: poprawny index.html dla Vercel
+INSTRUKCJA (bardzo prosto)
 
-- Dodany <base href="/">, aby względne ścieżki liczyły się od katalogu głównego.
-- Zostaw styles.css i app.js w tym samym katalogu co index.html.
-
-Kroki:
-1) Skopiuj zawartość <body>…</body> ze starego index.html.
-2) Wklej ją w sekcji <main id="app-root"> w nowym pliku.
-3) Podmień CRM_SuperObozy_Web/index.html w repozytorium i wypchnij zmianę.
-4) Vercel zbuduje nową wersję automatycznie.
+1) Wgraj WSZYSTKIE pliki do GitHub (albo bezpośrednio do Vercel).
+2) `config.js` — wpisz dane z Supabase (albo zostaw puste = DEMO).
+3) W Supabase (SQL Editor) uruchom `schema.sql` — utworzy tabele:
+   - leads
+   - offers
+   - reservations
+4) Wejdź na stronę:
+   - index.html → status połączenia + lista leadów
+   - offer.html → zapis oferty
+   - reservation.html → zapis rezerwacji

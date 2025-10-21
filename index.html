@@ -4,17 +4,31 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SuperObozy — CRM (demo w chmurze)</title>
-  <base href="/" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="./styles.css?v=1" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-  <header style="padding: 12px 16px;">
-    <h1 style="margin:0;">🌲 SuperObozy — CRM (demo w chmurze)</h1>
-    <small style="opacity:.75;">Darmowa wersja • Supabase + Vercel</small>
+  <header class="container">
+    <h1>🌲 SuperObozy — CRM (demo w chmurze)</h1>
+    <p class="muted">Darmowa wersja • Supabase + Vercel</p>
+    <div id="status">Status: <span class="badge neutral">sprawdzam…</span></div>
+    <nav class="mt">
+      <a class="btn" href="./offer.html">Wyślij ofertę ✉️</a>
+      <a class="btn" href="./reservation.html">Nowa rezerwacja 📅</a>
+    </nav>
   </header>
-  <main id="app-root" style="padding: 16px;">
-    <!-- Wklej tutaj swoją obecną zawartość BODY z poprzedniego pliku index.html -->
+
+  <main id="app-root" class="container mt">
+    <section class="card">
+      <h2>Podgląd leadów (demo)</h2>
+      <p>Lista poniżej ładuje się z Supabase. Gdy `config.js` jest pusty, pokażę przykładowe dane (DEMO).</p>
+      <div id="leads"></div>
+    </section>
   </main>
-  <script src="app.js" defer></script>
+
+  <footer class="container mt muted small">© 2025 SuperObozy — demo</footer>
+
+  <script src="./config.js"></script>
+  <script src="./app.js" defer></script>
 </body>
 </html>

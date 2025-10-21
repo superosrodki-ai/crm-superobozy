@@ -1,30 +1,19 @@
-# Email ofert + Kalendarz (Mac) – rozszerzenie dla CRM SuperObozy (Vercel + Supabase)
+# SuperObozy — CRM (demo w chmurze)
 
-## Co nowego
-- `/api/send-offer` – wysyłanie maili przez **Resend** + opcjonalny załącznik **ICS** (termin do kalendarza).
-- `/api/calendar.ics` – **publiczny feed iCal** z rezerwacjami z Supabase (możesz dodać subskrypcję w Kalendarzu na Macu).
-- `/offer` – prosta strona do wysyłania ofert (formularz).
+Lekki, statyczny CRM działający na **Vercel + Supabase** (bez buildów).
+- `index.html` — ekran główny + status połączenia
+- `offer.html` — formularz „Wyślij ofertę” (tabela `offers`)
+- `reservation.html` — formularz rezerwacji (tabela `reservations`)
+- `app.js` — logika (Supabase + tryb DEMO gdy brak kluczy)
+- `config.js` — ustawienia Supabase (lub puste => DEMO)
+- `schema.sql` — tworzy tabele
+- `styles.css` — prosty, czysty wygląd
+- `vercel.json` — wyłączony cache, działanie jako strona statyczna
 
-## Konfiguracja w Vercel (Env Vars)
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE`
-- `RESEND_API_KEY` – klucz z Resend.com
-- (opcjonalnie) `OFFER_FROM_EMAIL` – np. `oferty@superobozy.pl` (musi być zweryfikowana domena w Resend)
+## Szybki start
+1. Wgraj cały folder do repo (GitHub) lub bezpośrednio do Vercel (Other/Static).
+2. (Opcjonalnie) W Supabase uruchom `schema.sql` (utworzy tabele).
+3. Uzupełnij `config.js` (`SUPABASE_URL`, `SUPABASE_ANON_KEY`) — wtedy masz pełny zapis do bazy.  
+   Jeśli zostawisz puste — strona działa w **DEMO** (bez zapisu), nic się nie wykrzaczy.
 
-## Jak dodać do Kalendarza na Macu (subskrypcja)
-1. Otwórz Kalendarz (macOS).
-2. **Plik → Nowa subskrypcja kalendarza…**
-3. Wklej: `https://TWOJ-PROJEKT.vercel.app/calendar.ics` (podmień domenę Vercel).
-4. Zapisz. Wydarzenia ładują się z tabeli `reservations` w Supabase (automatyczne odświeżanie).
-
-## Wysyłanie ofert z ICS
-- Wejdź na `/offer`, wpisz **email, temat i treść HTML** (możesz wkleić sformatowaną ofertę).
-- Rozwiń „Załącz termin do kalendarza (ICS)” i podaj **start/koniec** – odbiorca w 1 klik doda termin do iCal/Outlook/Gmail.
-
-## Uwagi bezpieczeństwa
-- Klucz `service_role` i `RESEND_API_KEY` są wyłącznie na backendzie (serverless). Front nie widzi kluczy.
-- Jeśli chcesz ograniczyć dostęp do `/offer` i `/calendar.ics`, możemy dodać auth (Supabase Auth / Basic auth / Secret token).
-
-## Dalsze kroki
-- Szablony HTML ofert versionowane w Supabase (wysyłka po ID szablonu).
-- PDF załącznik (render HTML → PDF) – wymaga biblioteki do renderu w SSR (np. Playwright). Możemy dodać na życzenie.
+© 2025 SuperObozy
