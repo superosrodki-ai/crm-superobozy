@@ -3,34 +3,114 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nowa rezerwacja – SuperObozy</title>
-  <link rel="stylesheet" href="./styles.css?v=1" />
+  <title>Nowy kontakt – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=2" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    /* kilkanaście małych dodatków styli do „pigułek” i formularza */
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width: 820px){.form-grid{grid-template-columns:1fr}}
+    .pillbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .pill{border:1px solid #dcdcdc;border-radius:999px;padding:7px 12px;cursor:pointer;user-select:none;background:#fff}
+    .pill.active{background:#e9f8ee;border-color:#b6e5cc}
+    .helper{font-size:12px;color:#666;margin-top:6px}
+    .actions{display:flex;gap:10px;margin-top:16px}
+    .btn.primary{background:#2f6; border-color:#2f6;color:#063}
+    .btn.secondary{background:#f3f3f3}
+    textarea{min-height:100px}
+    label>span{display:block;font-weight:700;margin-bottom:6px}
+  </style>
 </head>
 <body>
   <header class="container">
-    <h1>📅 Nowa rezerwacja</h1>
-    <p class="muted">Zapis do tabeli <code>reservations</code> (Supabase) albo tryb DEMO.</p>
+    <h1>🌲 SuperObozy — CRM (demo w chmurze)</h1>
+    <p class="muted">Darmowa wersja • Supabase + Vercel</p>
     <nav class="mt"><a class="btn" href="./index.html">← Powrót</a></nav>
   </header>
 
   <main class="container mt">
-    <form id="reservation-form" class="card">
-      <div class="grid">
-        <label>Nazwa kontrahenta<input name="contractor" type="text" required placeholder="UKS Orzeł"/></label>
-        <label>Kontakt e-mail<input name="email" type="email" required placeholder="kontakt@superosrodki.pl"/></label>
-      </div>
-      <div class="grid">
-        <label>Od<input name="date_from" type="date" required/></label>
-        <label>Do<input name="date_to" type="date" required/></label>
-      </div>
-      <div class="grid">
-        <label>Miejsca<input name="seats" type="number" min="1" value="50" required/></label>
-        <label>Obiekt/pokoje<input name="rooms" type="text" placeholder="Pawilon A – 25 pokoi"/></label>
-      </div>
-      <button class="btn" type="submit">Zapisz rezerwację</button>
-    </form>
-    <p id="reservation-msg" class="mt muted"></p>
+    <section class="card">
+      <h2>➕ Nowy kontakt</h2>
+
+      <form id="contact-form" class="mt">
+        <div class="form-grid">
+          <label><span>Źródło</span>
+            <select name="source">
+              <option>Telefon</option><option>E-mail</option>
+              <option>Formularz www</option><option>Facebook</option>
+              <option>Instagram</option><option>Inne</option>
+            </select>
+          </label>
+          <label><span>Opiekun</span>
+            <input name="owner" type="text" value="Piotr" />
+          </label>
+
+          <label><span>Klub / Szkoła</span>
+            <input name="club" type="text" placeholder="np. UKS Orlik" />
+          </label>
+          <label><span>Osoba</span>
+            <input name="person" type="text" placeholder="np. Anna Kowalska" />
+          </label>
+
+          <label><span>Telefon</span>
+            <input name="phone" type="tel" placeholder="+48 600 700 800" />
+          </label>
+          <label><span>Email</span>
+            <input name="email" type="email" placeholder="kontakt@klub.pl" />
+          </label>
+
+          <label><span>Dyscyplina</span>
+            <input name="discipline" type="text" placeholder="np. piłka nożna / judo" />
+          </label>
+          <label><span>Uczestników</span>
+            <input name="participants" type="number" min="1" placeholder="np. 45" />
+          </label>
+
+          <label><span>Zaplecze</span>
+            <input name="facilities" type="text" placeholder="np. hala, boisko" />
+          </label>
+          <label><span>Termin (okno)</span>
+            <input name="date_window" type="text" placeholder="np. 15–28 lipca" />
+          </label>
+
+          <label style="grid-column:1/-1"><span>Lokalizacja preferowana</span>
+            <input name="pref_location" type="text" placeholder="np. zachodniopomorskie / morze" />
+          </label>
+        </div>
+
+        <div class="mt">
+          <strong>Zainteresowany campami:</strong>
+          <div class="pillbar" id="camps">
+            <div class="pill" data-v="Jastrowie">Jastrowie</div>
+            <div class="pill" data-v="Lipka">Lipka</div>
+            <div class="pill" data-v="Dąbki">Dąbki</div>
+            <div class="pill" data-v="Pobierowo">Pobierowo</div>
+            <div class="pill" data-v="Rewal">Rewal</div>
+          </div>
+        </div>
+
+        <div class="form-grid mt">
+          <label style="grid-column:1/-1"><span>Notatki</span>
+            <textarea name="notes" placeholder="Dodatkowe informacje..."></textarea>
+          </label>
+          <label><span>Follow-up</span>
+            <select name="follow_up">
+              <option value="1">jutro</option>
+              <option value="3" selected>za 3 dni</option>
+              <option value="7">za tydzień</option>
+              <option value="14">za 2 tygodnie</option>
+            </select>
+          </label>
+        </div>
+
+        <p class="helper">Po utworzeniu kontaktu możesz od razu otworzyć WhatsApp i napisać wiadomość.</p>
+
+        <div class="actions">
+          <button type="submit" class="btn secondary" id="save-only">💾 Zapisz nowy kontakt</button>
+          <button class="btn primary" id="save-and-wa">🟩💬 Zapisz i otwórz WhatsApp</button>
+        </div>
+      </form>
+    </section>
   </main>
 
   <script src="./config.js"></script>
