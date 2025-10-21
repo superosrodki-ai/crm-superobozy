@@ -1,0 +1,9 @@
+{
+  "name": "crm-superobozy-vercel-supabase-email-calendar",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "zod": "^3.23.8",
+    "resend": "^3.2.0"
+  }
+}

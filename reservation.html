@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Rezerwacja – CRM SuperObozy</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="material-icons">event_available</span>
+        <div>
+          <h1>Formularz rezerwacji</h1>
+          <small>Vercel → Supabase (serverless)</small>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="/"><span class="material-icons">arrow_back</span> CRM</a>
+        <a class="btn" href="/offer"><span class="material-icons">mail</span> Wyślij ofertę</a>
+        <button id="themeToggle" class="btn" title="Przełącz motyw"><span class="material-icons">dark_mode</span></button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="card">
+        <div class="card-header">
+          <h2><span class="material-icons">event</span> Zgłoś rezerwację</h2>
+        </div>
+        <form id="resForm">
+          <div class="grid">
+            <label>Nazwa klubu/grupy
+              <input name="group_name" required>
+            </label>
+            <label>Osoba kontaktowa
+              <input name="contact_person" required>
+            </label>
+            <label>Email
+              <input name="email" type="email" required>
+            </label>
+            <label>Telefon
+              <input name="phone" required>
+            </label>
+            <label>Termin od
+              <input name="date_from" type="date" required>
+            </label>
+            <label>Termin do
+              <input name="date_to" type="date" required>
+            </label>
+            <label>Liczba miejsc
+              <input name="capacity" type="number" min="1" required>
+            </label>
+            <label>Uwagi
+              <textarea name="notes" rows="3"></textarea>
+            </label>
+          </div>
+          <menu class="dialog-actions">
+            <button class="btn" type="reset">Wyczyść</button>
+            <button class="btn primary" type="submit">Wyślij</button>
+          </menu>
+        </form>
+        <div id="msg"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function applyTheme() {
+      const m = localStorage.getItem('crm_theme') ?? 'dark';
+      document.documentElement.dataset.theme = m;
+    }
+    function toggleTheme() {
+      const cur = document.documentElement.dataset.theme;
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('crm_theme', next);
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    applyTheme();
+
+    document.getElementById('resForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const payload = Object.fromEntries(fd.entries());
+      payload.capacity = Number(payload.capacity);
+      const res = await fetch('/api/reservations', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) }).then(r=>r.json());
+      const box = document.getElementById('msg');
+      if(res.ok){
+        box.innerHTML = '<p class="ok"><span class="material-icons">check_circle</span> Zapisano w Supabase.</p>';
+        // Optional: send an offer / ICS right after
+      } else {
+        box.innerHTML = '<p class="err"><span class="material-icons">error</span> Błąd: '+ (res.message || 'nieznany') +'</p>';
+      }
+    });
+  </script>
+</body>
+</html>

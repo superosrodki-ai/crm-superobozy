@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Wyślij ofertę – CRM SuperObozy</title>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css"/>
+</head>
+<body>
+  <div class="app">
+    <header class="app-header">
+      <div class="brand">
+        <span class="material-icons">mail</span>
+        <div>
+          <h1>Wysyłanie ofert</h1>
+          <small>Resend + załącznik ICS do kalendarza</small>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="/"><span class="material-icons">arrow_back</span> CRM</a>
+        <button id="themeToggle" class="btn" title="Przełącz motyw"><span class="material-icons">dark_mode</span></button>
+      </div>
+    </header>
+
+    <main class="content">
+      <section class="card">
+        <div class="card-header">
+          <h2><span class="material-icons">send</span> Wyślij ofertę mailem</h2>
+        </div>
+        <form id="offerForm">
+          <div class="grid">
+            <label>Do (email)
+              <input name="to" type="email" required placeholder="np. trener@klub.pl">
+            </label>
+            <label>Temat
+              <input name="subject" required value="Oferta obozu sportowego – SuperObozy">
+            </label>
+            <label style="grid-column:1 / -1">Treść (HTML)
+              <textarea name="html" rows="10" placeholder="<h2>Oferta</h2><p>..."></textarea>
+            </label>
+          </div>
+
+          <details>
+            <summary>Załącz termin do kalendarza (ICS)</summary>
+            <div class="grid">
+              <label>Tytuł wydarzenia
+                <input name="ics_title" placeholder="Obóz sportowy – Rezerwacja">
+              </label>
+              <label>Miejsce
+                <input name="ics_location" placeholder="Dąbki / Rewal / Pobierowo">
+              </label>
+              <label>Opis
+                <input name="ics_description" placeholder="Pakiet, liczba miejsc, kontakt...">
+              </label>
+              <label>Start (data i godzina)
+                <input name="ics_start" type="datetime-local">
+              </label>
+              <label>Koniec (data i godzina)
+                <input name="ics_end" type="datetime-local">
+              </label>
+            </div>
+          </details>
+
+          <menu class="dialog-actions" style="margin-top:12px">
+            <button class="btn" type="reset">Wyczyść</button>
+            <button class="btn primary" type="submit">Wyślij</button>
+          </menu>
+        </form>
+        <div id="msg"></div>
+      </section>
+      <section class="card">
+        <div class="card-header">
+          <h2><span class="material-icons">event</span> Subskrypcja kalendarza w Mac</h2>
+        </div>
+        <p>W Kalendarzu na Macu: Plik → Nowa subskrypcja kalendarza → Wklej URL:</p>
+        <pre><code>https://TWOJ-PROJEKT.vercel.app/calendar.ics</code></pre>
+        <p>Wydarzenia biorą się z tabeli <code>reservations</code> w Supabase (aktualizują się automatycznie).</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function applyTheme() {
+      const m = localStorage.getItem('crm_theme') ?? 'dark';
+      document.documentElement.dataset.theme = m;
+    }
+    function toggleTheme() {
+      const cur = document.documentElement.dataset.theme;
+      const next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('crm_theme', next);
+    }
+    document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+    applyTheme();
+
+    document.getElementById('offerForm').addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const data = Object.fromEntries(fd.entries());
+      const body = {
+        to: data.to,
+        subject: data.subject,
+        html: data.html || defaultHtml(),
+        attach_ics: !!(data.ics_start && data.ics_end),
+        ics_title: data.ics_title || data.subject,
+        ics_description: data.ics_description || '',
+        ics_location: data.ics_location || '',
+        ics_start: data.ics_start ? new Date(data.ics_start).toISOString() : null,
+        ics_end: data.ics_end ? new Date(data.ics_end).toISOString() : null
+      };
+      const res = await fetch('/api/send-offer', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) }).then(r=>r.json());
+      const box = document.getElementById('msg');
+      if(res.ok){
+        box.innerHTML = '<p class="ok"><span class="material-icons">check_circle</span> Wysłano.</p>';
+        e.target.reset();
+      }else{
+        box.innerHTML = '<p class="err"><span class="material-icons">error</span> Błąd: '+ (res.message || 'nieznany') +'</p>';
+      }
+    });
+
+    function defaultHtml(){
+      return `<h2>Oferta obozu sportowego</h2>
+<p>Dzień dobry,</p>
+<p>W załączeniu przesyłam ofertę oraz (opcjonalnie) termin w formacie iCalendar (ICS). W razie pytań pozostaję do dyspozycji.</p>
+<p>Pozdrawiam,<br/>SuperObozy</p>`;
+    }
+  </script>
+</body>
+</html>
