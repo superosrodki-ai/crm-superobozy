@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nowy kontakt – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=4" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    @media (max-width: 820px){.form-grid{grid-template-columns:1fr}}
+    label>span{display:block;font-weight:700;margin-bottom:6px}
+    .pillbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+    .pill{border:1px solid #dcdcdc;border-radius:999px;padding:7px 12px;cursor:pointer;user-select:none;background:#fff}
+    .pill.active{background:#e9f8ee;border-color:#b6e5cc}
+    .actions{display:flex;gap:10px;margin-top:16px}
+    .btn.primary{background:#2f6;border-color:#2f6;color:#063}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>🌲 SuperObozy — CRM (kontakt)</h1>
+    <p class="muted">Darmowa wersja • Supabase + Vercel</p>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
+    </nav>
+  </header>
+
+  <main class="container mt">
+    <section class="card">
+      <h2>➕ Nowy kontakt</h2>
+
+      <form id="contact-form" class="mt">
+        <div class="form-grid">
+          <label><span>Źródło</span>
+            <select name="source">
+              <option>Telefon</option><option>E-mail</option>
+              <option>Formularz www</option><option>Facebook</option>
+              <option>Instagram</option><option>Inne</option>
+            </select>
+          </label>
+
+          <label><span>Opiekun</span>
+            <input name="owner" type="text" value="Piotr" />
+          </label>
+
+          <label><span>Klub / Szkoła</span>
+            <input name="club" type="text" placeholder="np. UKS Orlik" />
+          </label>
+
+          <label><span>Osoba</span>
+            <input name="person" type="text" placeholder="np. Anna Kowalska" />
+          </label>
+
+          <label><span>Telefon</span>
+            <input name="phone" type="tel" placeholder="+48 600 700 800" />
+          </label>
+
+          <label><span>Email</span>
+            <input name="email" type="email" placeholder="kontakt@klub.pl" />
+          </label>
+
+          <label><span>Dyscyplina</span>
+            <input name="discipline" type="text" placeholder="np. piłka nożna / judo" />
+          </label>
+
+          <label><span>Uczestników</span>
+            <input name="participants" type="number" min="1" placeholder="np. 45" />
+          </label>
+
+          <label><span>Zaplecze</span>
+            <input name="facilities" type="text" placeholder="np. hala, boisko" />
+          </label>
+
+          <label><span>Termin (okno)</span>
+            <input name="date_window" type="text" placeholder="np. 15–28 lipca" />
+          </label>
+
+          <label style="grid-column:1/-1"><span>Lokalizacja preferowana</span>
+            <input name="pref_location" type="text" placeholder="np. zachodniopomorskie / morze" />
+          </label>
+        </div>
+
+        <div class="mt">
+          <strong>Zainteresowany campami:</strong>
+          <div class="pillbar" id="camps">
+            <div class="pill" data-v="Jastrowie">Jastrowie</div>
+            <div class="pill" data-v="Lipka">Lipka</div>
+            <div class="pill" data-v="Dąbki">Dąbki</div>
+            <div class="pill" data-v="Pobierowo">Pobierowo</div>
+            <div class="pill" data-v="Rewal">Rewal</div>
+          </div>
+        </div>
+
+        <div class="form-grid mt">
+          <label style="grid-column:1/-1"><span>Notatki</span>
+            <textarea name="notes" placeholder="Dodatkowe informacje..." rows="4"></textarea>
+          </label>
+          <label><span>Follow-up</span>
+            <select name="follow_up">
+              <option value="1">jutro</option>
+              <option value="3" selected>za 3 dni</option>
+              <option value="7">za tydzień</option>
+              <option value="14">za 2 tygodnie</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="actions">
+          <button type="submit" class="btn" id="save-only">💾 Zapisz nowy kontakt</button>
+          <button class="btn primary" id="save-and-wa">🟩💬 Zapisz i otwórz WhatsApp</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+
+  <script>
+  (function(){
+    const form = document.getElementById("contact-form");
+    if(!form) return;
+
+    document.querySelectorAll("#camps .pill").forEach(p=>{
+      p.addEventListener("click", ()=> p.classList.toggle("active"));
+    });
+
+    const cfg = window.CONFIG || { SUPABASE_URL:"", SUPABASE_ANON_KEY:"" };
+    const connected = cfg.SUPABASE_URL && cfg.SUPABASE_ANON_KEY && window.supabase;
+    const client = connected ? window.supabase.createClient(cfg.SUPABASE_URL, cfg.SUPABASE_ANON_KEY) : null;
+
+    function payloadFromForm(){
+      const fd = new FormData(form);
+      const camps = Array.from(document.querySelectorAll("#camps .pill.active")).map(x=>x.dataset.v);
+      return {
+        source: fd.get("source") || null,
+        owner: fd.get("owner") || null,
+        club: fd.get("club") || null,
+        person: fd.get("person") || null,
+        phone: fd.get("phone") || null,
+        email: fd.get("email") || null,
+        discipline: fd.get("discipline") || null,
+        participants: Number(fd.get("participants")||0),
+        facilities: fd.get("facilities") || null,
+        date_window: fd.get("date_window") || null,
+        pref_location: fd.get("pref_location") || null,
+        camps,
+        notes: fd.get("notes") || null,
+        follow_up_days: Number(fd.get("follow_up")||0),
+        created_at: new Date().toISOString()
+      };
+    }
+
+    async function save(openWa){
+      const payload = payloadFromForm();
+      if(!client){
+        alert("DEMO: brak kluczy w config.js – zapis do bazy pominięty.");
+        if(openWa) openWhatsApp(payload);
+        return;
+      }
+      try{
+        const { error } = await client.from("leads").insert(payload);
+        if(error) throw error;
+        alert("Kontakt zapisany ✅");
+        if(openWa) openWhatsApp(payload);
+        form.reset();
+        document.querySelectorAll("#camps .pill.active").forEach(p=>p.classList.remove("active"));
+      }catch(e){
+        alert("Błąd zapisu: " + e.message);
+      }
+    }
+
+    function openWhatsApp(p){
+      const msg = `Dzień dobry! Tu SuperObozy.\n`
+        + `Otrzymaliśmy zapytanie od: ${p.club||"-"} (${p.person||"-"}).\n`
+        + `Uczestników: ${p.participants||"-"}, termin: ${p.date_window||"-"}.\n`
+        + `Jak mogę pomóc?`;
+      window.open("https://wa.me/?text=" + encodeURIComponent(msg), "_blank");
+    }
+
+    document.getElementById("save-only").addEventListener("click", e => { e.preventDefault(); save(false); });
+    document.getElementById("save-and-wa").addEventListener("click", e => { e.preventDefault(); save(true); });
+  })();
+  </script>
+</body>
+</html>
