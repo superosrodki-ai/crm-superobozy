@@ -23,3 +23,6 @@ input, textarea { width:100%; padding:10px; border-radius: 10px; border:1px soli
 code { background:#f6f6f6; padding:2px 6px; border-radius:8px; }
 table { width:100%; border-collapse: collapse; }
 th, td { border:1px solid #eee; padding:8px; text-align:left; }
+.toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.table{border-collapse:collapse;width:100%}
+.table th,.table td{border:1px solid #eee;padding:8px;text-align:left;white-space:nowrap}
