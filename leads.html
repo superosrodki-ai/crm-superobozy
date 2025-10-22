@@ -1,0 +1,55 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Leady – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=6" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+<header class="container">
+  <h1>📋 Kontakty (leady)</h1>
+  <p class="muted small">Filtry + paginacja • działa z Supabase • tryb DEMO bez kluczy</p>
+  <nav class="mt">
+    <a class="btn" href="./index.html">← Powrót</a>
+    <a class="btn" href="./contact.html">➕ Nowy kontakt</a>
+  </nav>
+</header>
+
+<main class="container mt">
+  <section class="card">
+    <div class="toolbar">
+      <input id="q" placeholder="Szukaj: klub, osoba, e-mail…" />
+      <select id="owner">
+        <option value="">Opiekun: wszyscy</option><option>Piotr</option><option>Anna</option><option>Kasia</option>
+      </select>
+      <select id="source">
+        <option value="">Źródło: wszystkie</option>
+        <option>Telefon</option><option>E-mail</option><option>Formularz www</option>
+        <option>Facebook</option><option>Instagram</option>
+      </select>
+      <input id="minp" type="number" min="0" placeholder="Min. uczestników" style="width:170px" />
+      <input id="from" type="date"/><span class="muted">→</span><input id="to" type="date"/>
+      <button class="btn" id="btn-search">🔎 Filtruj</button>
+      <button class="btn" id="btn-clear">✖️ Wyczyść</button>
+      <button class="btn" id="btn-csv">⬇️ CSV</button>
+    </div>
+
+    <div id="list" class="mt"></div>
+
+    <div class="toolbar mt" style="justify-content:space-between">
+      <div id="info" class="muted small"></div>
+      <div>
+        <button class="btn" id="prev">← Poprzednie</button>
+        <button class="btn" id="next">Następne →</button>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="./config.js"></script>
+<script src="./app.js" defer></script>
+</body>
+</html>

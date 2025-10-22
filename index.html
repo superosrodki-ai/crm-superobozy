@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SuperObozy — CRM (demo)</title>
+  <link rel="stylesheet" href="./styles.css?v=6" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>🌲 SuperObozy — CRM (demo w chmurze)</h1>
+    <p class="muted">Darmowa wersja • Supabase + Vercel</p>
+    <nav class="mt">
+      <a class="btn" href="./offer.html">✉️ Wyślij ofertę</a>
+      <a class="btn" href="./reservation.html">📅 Nowa rezerwacja</a>
+      <a class="btn" href="./contact.html">👤 Nowy kontakt</a>
+      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
+    </nav>
+  </header>
+
+  <main class="container mt">
+    <section class="card">
+      <h2>Podgląd leadów</h2>
+      <p class="muted small">Gdy <code>config.js</code> jest pusty → wyświetlę przykładowe dane.</p>
+      <div id="demo-leads"></div>
+      <hr class="sep">
+      <p class="small muted">Wskazówka: aby zapisać prawdziwe leady, uzupełnij plik <code>config.js</code> danymi z Supabase i utwórz tabelę <code>leads</code> wg instrukcji w README.</p>
+    </section>
+  </main>
+
+  <footer class="container small">© SuperObozy – demo</footer>
+
+  <script src="./config.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

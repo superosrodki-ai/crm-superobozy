@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nowy kontakt – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=6" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>👤 Nowy kontakt</h1>
+    <p class="muted">Wypełnij i zapisz. Z kluczami Supabase zapisze się do tabeli <code>leads</code>.</p>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
+    </nav>
+  </header>
+
+  <main class="container mt">
+    <section class="card">
+      <form id="contact-form" class="grid">
+        <label>Źródło
+          <select name="source">
+            <option>Telefon</option><option>E-mail</option>
+            <option>Formularz www</option><option>Facebook</option>
+            <option>Instagram</option><option>Inne</option>
+          </select>
+        </label>
+        <label>Opiekun <input name="owner" value="Piotr" /></label>
+        <label>Klub / Szkoła <input name="club" placeholder="np. UKS Orlik" /></label>
+        <label>Osoba <input name="person" placeholder="np. Anna Kowalska" /></label>
+        <label>Telefon <input name="phone" placeholder="+48 600 700 800" /></label>
+        <label>E-mail <input name="email" type="email" placeholder="kontakt@klub.pl" /></label>
+        <label>Dyscyplina <input name="discipline" placeholder="np. piłka nożna / judo" /></label>
+        <label>Uczestników <input name="participants" type="number" min="1" placeholder="np. 45" /></label>
+        <label>Zaplecze <input name="facilities" placeholder="np. hala, boisko" /></label>
+        <label>Termin (okno) <input name="date_window" placeholder="np. 15–28 lipca" /></label>
+        <label style="grid-column:1/-1">Lokalizacja preferowana
+          <input name="pref_location" placeholder="np. zachodniopomorskie / morze" />
+        </label>
+      </form>
+
+      <div class="mt">
+        <strong>Zainteresowany campami:</strong>
+        <div class="pillbar" id="camps">
+          <div class="pill" data-v="Jastrowie">Jastrowie</div>
+          <div class="pill" data-v="Lipka">Lipka</div>
+          <div class="pill" data-v="Dąbki">Dąbki</div>
+          <div class="pill" data-v="Pobierowo">Pobierowo</div>
+          <div class="pill" data-v="Rewal">Rewal</div>
+        </div>
+      </div>
+
+      <form class="grid mt" id="contact-meta">
+        <label style="grid-column:1/-1">Notatki
+          <textarea name="notes" rows="4" placeholder="Dodatkowe informacje..."></textarea>
+        </label>
+        <label>Follow-up
+          <select name="follow_up">
+            <option value="1">jutro</option><option value="3" selected>za 3 dni</option>
+            <option value="7">za tydzień</option><option value="14">za 2 tygodnie</option>
+          </select>
+        </label>
+      </form>
+
+      <div class="toolbar mt">
+        <button class="btn" id="save-only">💾 Zapisz nowy kontakt</button>
+        <button class="btn btn-green" id="save-and-wa">🟩💬 Zapisz i otwórz WhatsApp</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

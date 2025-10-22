@@ -1,0 +1,25 @@
+{
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "^/contact$",
+      "dest": "/contact.html"
+    },
+    {
+      "src": "^/leads$",
+      "dest": "/leads.html"
+    },
+    {
+      "src": "^/reservation$",
+      "dest": "/reservation.html"
+    },
+    {
+      "src": "^/offer$",
+      "dest": "/offer.html"
+    },
+    {
+      "src": "^/$",
+      "dest": "/index.html"
+    }
+  ]
+}
