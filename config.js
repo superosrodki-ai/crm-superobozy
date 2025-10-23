@@ -1,11 +1,4 @@
-
-/**
- * Jeśli chcesz zapisywać w Supabase:
- *  - SUPABASE_URL: np. "https://abcd.supabase.co"
- *  - SUPABASE_ANON_KEY: klucz "anon"
- * Zostaw puste, aby działał tryb DEMO (bez zapisu).
- */
-window.CONFIG = {
-  SUPABASE_URL: "",
-  SUPABASE_ANON_KEY: ""
-};
+// config.js – uzupełnij danymi z Supabase (Project settings → API)
+// Gdy oba pola pozostaną puste – aplikacja działa w trybie DEMO i zapisuje leady lokalnie.
+const SUPABASE_URL = "";          // np. "https://abcd1234.supabase.co"
+const SUPABASE_ANON_KEY = "";     // klucz anon public
