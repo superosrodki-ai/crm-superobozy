@@ -1,55 +1,102 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Leady – SuperObozy</title>
-  <link rel="stylesheet" href="./styles.css?v=6" />
+  <link rel="stylesheet" href="./styles.css?v=8" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .toolbar .grow{flex:1}
+    .input{border:1px solid var(--br);border-radius:10px;padding:10px 12px;width:100%}
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    thead th{font-weight:600;cursor:pointer;font-size:.95rem;color:#334155}
+    tbody tr{background:#fff;border:1px solid var(--br);}
+    tbody td{padding:12px 10px;border-top:1px solid var(--br);border-bottom:1px solid var(--br)}
+    tbody td:first-child{border-left:1px solid var(--br);border-top-left-radius:12px;border-bottom-left-radius:12px}
+    tbody td:last-child{border-right:1px solid var(--br);border-top-right-radius:12px;border-bottom-right-radius:12px}
+    .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.8rem;border:1px solid transparent}
+    .s-nowy{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}
+    .s-w_trakcie{background:#ecfeff;border-color:#a5f3fc;color:#155e75}
+    .s-oferta_wyslana{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
+    .s-umowa{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
+    .s-utracony{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+    .muted{color:#6b7280}
+    .chip-sm{border:1px solid var(--br);border-radius:999px;padding:2px 8px;margin-right:6px}
+    .nowrap{white-space:nowrap}
+    .right{text-align:right}
+    .center{text-align:center}
+    .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    .kpi .card{padding:10px 12px}
+    .sort{font-size:.8rem;color:#64748b;margin-left:6px}
+  </style>
 </head>
 <body>
-<header class="container">
-  <h1>📋 Kontakty (leady)</h1>
-  <p class="muted small">Filtry + paginacja • działa z Supabase • tryb DEMO bez kluczy</p>
-  <nav class="mt">
-    <a class="btn" href="./index.html">← Powrót</a>
-    <a class="btn" href="./contact.html">➕ Nowy kontakt</a>
-  </nav>
-</header>
+  <header class="container">
+    <h1>📋 Leady</h1>
+    <p class="muted">Wyszukiwanie, sortowanie, statusy 1‑klik i szybki eksport.</p>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+      <a class="btn" href="./contact.html">➕ Nowy kontakt</a>
+    </nav>
 
-<main class="container mt">
-  <section class="card">
-    <div class="toolbar">
-      <input id="q" placeholder="Szukaj: klub, osoba, e-mail…" />
-      <select id="owner">
-        <option value="">Opiekun: wszyscy</option><option>Piotr</option><option>Anna</option><option>Kasia</option>
-      </select>
-      <select id="source">
-        <option value="">Źródło: wszystkie</option>
-        <option>Telefon</option><option>E-mail</option><option>Formularz www</option>
-        <option>Facebook</option><option>Instagram</option>
-      </select>
-      <input id="minp" type="number" min="0" placeholder="Min. uczestników" style="width:170px" />
-      <input id="from" type="date"/><span class="muted">→</span><input id="to" type="date"/>
-      <button class="btn" id="btn-search">🔎 Filtruj</button>
-      <button class="btn" id="btn-clear">✖️ Wyczyść</button>
-      <button class="btn" id="btn-csv">⬇️ CSV</button>
-    </div>
-
-    <div id="list" class="mt"></div>
-
-    <div class="toolbar mt" style="justify-content:space-between">
-      <div id="info" class="muted small"></div>
-      <div>
-        <button class="btn" id="prev">← Poprzednie</button>
-        <button class="btn" id="next">Następne →</button>
+    <div class="kpi">
+      <div class="card">
+        <div class="muted">Follow-upy „na dziś”</div>
+        <div id="kpi-today" class="mono">—</div>
+      </div>
+      <div class="card">
+        <div class="muted">Łącznie leadów</div>
+        <div id="kpi-total" class="mono">—</div>
       </div>
     </div>
-  </section>
-</main>
+  </header>
 
-<script src="./config.js"></script>
-<script src="./app.js" defer></script>
+  <main class="container mt">
+    <section class="card">
+      <div class="toolbar">
+        <input id="q" class="input grow" placeholder="Szukaj: klub, osoba, e-mail, telefon, opiekun…" />
+        <select id="f-status" class="input">
+          <option value="">Status: wszystkie</option>
+          <option value="nowy">Nowy</option>
+          <option value="w_trakcie">W trakcie</option>
+          <option value="oferta_wyslana">Oferta wysłana</option>
+          <option value="umowa">Umowa</option>
+          <option value="utracony">Utracony</option>
+        </select>
+        <select id="f-owner" class="input">
+          <option value="">Opiekun: wszyscy</option>
+          <option>Piotr</option>
+          <option>Anna</option>
+          <option>Kasia</option>
+        </select>
+        <button id="btn-export" class="btn">⬇️ Eksport CSV</button>
+      </div>
+
+      <div class="mt" style="overflow-x:auto">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="created_at">Data <span class="sort" id="s-created_at"></span></th>
+              <th data-sort="club">Klub / Szkoła <span class="sort" id="s-club"></span></th>
+              <th>Kontakt</th>
+              <th data-sort="owner">Opiekun <span class="sort" id="s-owner"></span></th>
+              <th data-sort="lead_score" class="right">Score <span class="sort" id="s-lead_score"></span></th>
+              <th data-sort="status" class="center">Status <span class="sort" id="s-status"></span></th>
+            </tr>
+          </thead>
+          <tbody id="rows">
+            <!-- rows -->
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted mt">Podpowiedź: kliknij w <em>Status</em>, by zmienić go jednym kliknięciem.</p>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./leads.js" defer></script>
 </body>
 </html>
