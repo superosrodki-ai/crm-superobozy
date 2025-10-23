@@ -1,38 +1,253 @@
-
 <!DOCTYPE html>
 <html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SuperObozy — CRM (demo)</title>
-  <link rel="stylesheet" href="./styles.css?v=6" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-</head>
-<body>
-  <header class="container">
-    <h1>🌲 SuperObozy — CRM (demo w chmurze)</h1>
-    <p class="muted">Darmowa wersja • Supabase + Vercel</p>
-    <nav class="mt">
-      <a class="btn" href="./offer.html">✉️ Wyślij ofertę</a>
-      <a class="btn" href="./reservation.html">📅 Nowa rezerwacja</a>
-      <a class="btn" href="./contact.html">👤 Nowy kontakt</a>
-      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
-    </nav>
-  </header>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SuperObozy CRM — kontakt</title>
+    <style>
+      :root{
+        --bg:#0b1220;           /* tło strony (ciemne) */
+        --page:#0f172a;         /* tło kontentu */
+        --card:#ffffff;         /* karty */
+        --line:#e5e7eb;         /* linie */
+        --muted:#64748b;        /* szary tekst */
+        --text:#0f172a;         /* główny tekst */
+        --brand:#0ea5e9;        /* niebieski */
+        --ok:#2b9348;           /* zielony (WA) */
+      }
+      html, body { height:100%; }
+      body{
+        margin:0; background:var(--bg); color:#fff; font:14px/1.45 Arial, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      }
+      .shell{ max-width:1120px; margin:0 auto; padding:18px; }
+      .header { display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;}
+      .brand { display:flex; gap:10px; align-items:center; font-weight:800; font-size:18px;}
+      .tag { padding:6px 10px; border:1px solid #283549; background:#132033; color:#a6d8ff; border-radius:999px; font-size:12px;}
 
-  <main class="container mt">
-    <section class="card">
-      <h2>Podgląd leadów</h2>
-      <p class="muted small">Gdy <code>config.js</code> jest pusty → wyświetlę przykładowe dane.</p>
-      <div id="demo-leads"></div>
-      <hr class="sep">
-      <p class="small muted">Wskazówka: aby zapisać prawdziwe leady, uzupełnij plik <code>config.js</code> danymi z Supabase i utwórz tabelę <code>leads</code> wg instrukcji w README.</p>
-    </section>
-  </main>
+      .page {
+        background:var(--page);
+        border:1px solid #131c2e;
+        border-radius:14px;
+        padding:14px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      }
 
-  <footer class="container small">© SuperObozy – demo</footer>
+      /* KARTA: Nowy kontakt */
+      .card {
+        background:var(--card);
+        color:var(--text);
+        border:1px solid var(--line);
+        border-radius:16px;
+        padding:16px;
+        box-shadow:0 8px 30px rgba(2,6,23,.10);
+        margin-bottom:14px;
+      }
+      .card h3 {
+        margin:0 0 12px;
+        font-size:16px;
+        font-weight:800;
+        display:flex;
+        gap:8px;
+        align-items:center;
+      }
+      .grid2 { display:grid; grid-template-columns: 1fr 1fr; gap:12px 16px;}
+      .grid1 { display:grid; grid-template-columns: 1fr; gap:12px; }
 
-  <script src="./config.js"></script>
-  <script src="./app.js" defer></script>
-</body>
+      label { font-size:13px; font-weight:700; color:#0b1220; margin:0 0 6px; display:block; }
+      .field { display:flex; flex-direction:column; }
+      input, select, textarea{
+        width:100%; padding:12px 12px; border:1px solid #d0d7de; border-radius:12px; background:#fff; outline:none;
+        font:inherit; color:#0b1220;
+      }
+      input:focus, select:focus, textarea:focus{ border-color:var(--brand); box-shadow:0 0 0 3px rgba(14,165,233,.15);}
+      textarea{ min-height:110px; resize:vertical;}
+
+      /* pigułki campów */
+      .campbar{ display:flex; gap:12px; flex-wrap:wrap; }
+      .camp{
+        display:flex; align-items:center; gap:10px;
+        border:1px solid var(--line); background:#f1f5f9; color:#334155;
+        padding:10px 14px; border-radius:999px; user-select:none; cursor:pointer;
+        transition: .15s ease;
+      }
+      .camp input{ accent-color:var(--brand); width:18px; height:18px; }
+      .camp:has(input:checked){ background:#eaf6ff; border-color:#cae9ff; color:#064e80; font-weight:700; }
+
+      /* przyciski */
+      .bar{ display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;}
+      .btn{
+        border:none; padding:12px 16px; border-radius:12px; font-weight:800; cursor:pointer; color:#fff;
+        display:inline-flex; align-items:center; gap:10px;
+      }
+      .btn:disabled{ opacity:.65; cursor:not-allowed;}
+      .primary{ background:var(--brand); }
+      .wa{ background:var(--ok); }
+      .ghost{ background:#fff; color:var(--muted); border:1px solid var(--line); }
+
+      /* Lista + karta klienta (zostawiam, żeby pasowało do app.js) */
+      .table { width:100%; border-collapse:collapse; }
+      .table th, .table td { border-bottom:1px solid #edf2f7; padding:10px; text-align:left; }
+      .row-click { cursor:pointer; }
+      .small{ color:#64748b; font-size:12px; }
+      .hidden { display:none; }
+
+      /* Sekcje nagłówkowe */
+      .section-title{ font-weight:800; font-size:13px; color:#0b1220; margin:8px 0 6px; }
+      .help{ color:#64748b; font-size:12px; margin-top:6px; }
+    </style>
+  </head>
+  <body>
+    <div class="shell">
+      <div class="header">
+        <div class="brand">🌲 SuperObozy — <span style="color:#8bd3ff">CRM</span></div>
+        <span class="tag">Darmowa wersja • Supabase + Vercel</span>
+      </div>
+
+      <div class="page">
+        <!-- NOWY LEAD -->
+        <div class="card">
+          <h3>➕ Nowy kontakt</h3>
+
+          <div class="grid2">
+            <div class="field">
+              <label>Źródło</label>
+              <select id="source"><option>Telefon</option><option>Mail</option><option>FB/IG</option><option>Inne</option></select>
+            </div>
+            <div class="field">
+              <label>Opiekun</label>
+              <input id="owner" placeholder="np. Piotr" />
+            </div>
+
+            <div class="field">
+              <label>Klub / Szkoła</label>
+              <input id="club" placeholder="np. UKS Orlik" />
+            </div>
+            <div class="field">
+              <label>Osoba</label>
+              <input id="person" placeholder="np. Anna Kowalska" />
+            </div>
+
+            <div class="field">
+              <label>Telefon</label>
+              <input id="phone" placeholder="+48 600 700 800" />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input id="email" placeholder="kontakt@klub.pl" />
+            </div>
+
+            <div class="field">
+              <label>Dyscyplina</label>
+              <input id="sport" placeholder="np. piłka nożna / judo" />
+            </div>
+            <div class="field">
+              <label>Uczestników</label>
+              <input id="participants" type="number" min="1" step="1" />
+            </div>
+
+            <div class="field">
+              <label>Zaplecze</label>
+              <input id="facilities" placeholder="np. hala, boisko" />
+            </div>
+            <div class="field">
+              <label>Termin (okno)</label>
+              <input id="term_window" placeholder="np. 15–28 lipca" />
+            </div>
+
+            <div class="field grid1" style="grid-column:1 / -1">
+              <label>Lokalizacja preferowana</label>
+              <input id="location_pref" placeholder="np. zachodniopomorskie / morze" />
+            </div>
+          </div>
+
+          <div class="section-title">Zainteresowany campami:</div>
+          <div class="campbar">
+            <label class="camp"><input type="checkbox" id="camp_jastrowie"> Jastrowie</label>
+            <label class="camp"><input type="checkbox" id="camp_lipka"> Lipka</label>
+            <label class="camp"><input type="checkbox" id="camp_dabki"> Dąbki</label>
+            <label class="camp"><input type="checkbox" id="camp_pobierowo"> Pobierowo</label>
+            <label class="camp"><input type="checkbox" id="camp_rewal"> Rewal</label>
+          </div>
+
+          <div class="grid2" style="margin-top:12px;">
+            <div class="field">
+              <label>Notatki</label>
+              <textarea id="notes" placeholder="Ustalenia z rozmowy..."></textarea>
+            </div>
+            <div class="field">
+              <label>Follow-up</label>
+              <select id="followUpDays">
+                <option value="0">— brak —</option>
+                <option value="2">za 2 dni</option>
+                <option value="3" selected>za 3 dni</option>
+                <option value="5">za 5 dni</option>
+                <option value="7">za 7 dni</option>
+              </select>
+              <div class="help">Po utworzeniu możesz od razu otworzyć WhatsApp.</div>
+            </div>
+          </div>
+
+          <div class="bar">
+            <button class="btn primary" id="btnAdd">💾 Zapisz nowy kontakt</button>
+            <button class="btn wa" id="btnAddAndWA">💾🟢 Zapisz i otwórz WhatsApp</button>
+          </div>
+        </div>
+
+        <!-- LISTA LEADÓW -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>📋 Leady</h3>
+            <button class="btn ghost" id="btnReload" style="color:#334155;">🔄 Odśwież listę</button>
+          </div>
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>Klub</th><th>Osoba</th><th>Tel</th><th>Status</th><th>Następny kontakt</th></tr>
+            </thead>
+            <tbody id="leadBody"></tbody>
+          </table>
+          <div class="small">Kliknij w wiersz, aby otworzyć „Kartę klienta”.</div>
+        </div>
+
+        <!-- KARTA KLIENTA -->
+        <div class="card hidden" id="card">
+          <h3>🗂️ Karta klienta</h3>
+          <div id="leadHeader" class="small" style="margin-bottom:8px;"></div>
+
+          <div class="section-title">Status</div>
+          <div class="campbar" id="statusBar"></div>
+
+          <div class="bar" style="margin-top:12px;">
+            <button class="btn wa" id="btnWA">💬 WhatsApp</button>
+            <button class="btn ghost" id="btnClose" style="color:#334155;">Zamknij kartę</button>
+          </div>
+
+          <div class="section-title" style="margin-top:14px;">Historia</div>
+          <div id="history"></div>
+
+          <div class="section-title" style="margin-top:14px;">Nowa notatka</div>
+          <textarea id="note" rows="3" placeholder="co ustalone?"></textarea>
+          <div class="bar" style="align-items:flex-end;">
+            <div class="field" style="max-width:220px;">
+              <label>Follow-up</label>
+              <select id="fuDays">
+                <option value="0">— bez zmian —</option>
+                <option value="2">+2 dni</option>
+                <option value="3">+3 dni</option>
+                <option value="5">+5 dni</option>
+                <option value="7">+7 dni</option>
+              </select>
+            </div>
+            <button class="btn primary" id="btnSaveNote">Zapisz do historii</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Twoje klucze Supabase -->
+    <script src="config.js"></script>
+    <!-- Biblioteka Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Logika CRM (twój app.js – bez zmian) -->
+    <script src="app.js"></script>
+  </body>
 </html>
