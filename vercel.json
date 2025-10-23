@@ -1,25 +1,10 @@
 {
   "cleanUrls": true,
-  "routes": [
-    {
-      "src": "^/contact$",
-      "dest": "/contact.html"
-    },
-    {
-      "src": "^/leads$",
-      "dest": "/leads.html"
-    },
-    {
-      "src": "^/reservation$",
-      "dest": "/reservation.html"
-    },
-    {
-      "src": "^/offer$",
-      "dest": "/offer.html"
-    },
-    {
-      "src": "^/$",
-      "dest": "/index.html"
-    }
+  "rewrites": [
+    { "source": "/contact",     "destination": "/contact.html" },
+    { "source": "/leads",       "destination": "/leads.html" },
+    { "source": "/reservation", "destination": "/reservation.html" },
+    { "source": "/offer",       "destination": "/offer.html" },
+    { "source": "/",            "destination": "/index.html" }
   ]
 }
