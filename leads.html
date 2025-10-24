@@ -4,60 +4,50 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Leady – SuperObozy</title>
-  <link rel="stylesheet" href="./styles.css?v=8" />
+  <link rel="stylesheet" href="./styles.css?v=10" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
+    body{background:#0f172a;color:#e5e7eb}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
     .toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .toolbar .grow{flex:1}
-    .input{border:1px solid var(--br);border-radius:10px;padding:10px 12px;width:100%}
+    .input{background:#0b1220;border:1px solid #1f2937;border-radius:10px;padding:10px 12px;color:#e5e7eb;width:100%}
     table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    thead th{font-weight:600;cursor:pointer;font-size:.95rem;color:#334155}
-    tbody tr{background:#fff;border:1px solid var(--br);}
-    tbody td{padding:12px 10px;border-top:1px solid var(--br);border-bottom:1px solid var(--br)}
-    tbody td:first-child{border-left:1px solid var(--br);border-top-left-radius:12px;border-bottom-left-radius:12px}
-    tbody td:last-child{border-right:1px solid var(--br);border-top-right-radius:12px;border-bottom-right-radius:12px}
+    thead th{font-weight:600;cursor:pointer;font-size:.95rem;color:#cbd5e1}
+    tbody tr{background:#0b1220;border:1px solid #1f2937}
+    tbody td{padding:12px 10px;border-top:1px solid #1f2937;border-bottom:1px solid #1f2937}
+    tbody td:first-child{border-left:1px solid #1f2937;border-top-left-radius:12px;border-bottom-left-radius:12px}
+    tbody td:last-child{border-right:1px solid #1f2937;border-top-right-radius:12px;border-bottom-right-radius:12px}
     .badge{display:inline-block;padding:4px 10px;border-radius:999px;font-size:.8rem;border:1px solid transparent}
-    .s-nowy{background:#eef2ff;border-color:#c7d2fe;color:#3730a3}
-    .s-w_trakcie{background:#ecfeff;border-color:#a5f3fc;color:#155e75}
-    .s-oferta_wyslana{background:#fff7ed;border-color:#fed7aa;color:#9a3412}
-    .s-umowa{background:#ecfdf5;border-color:#bbf7d0;color:#065f46}
-    .s-utracony{background:#fef2f2;border-color:#fecaca;color:#991b1b}
+    .s-nowy{background:#3730a3;color:#e0e7ff}
+    .s-w_trakcie{background:#155e75;color:#a5f3fc}
+    .s-oferta_wyslana{background:#9a3412;color:#ffedd5}
+    .s-umowa{background:#065f46;color:#bbf7d0}
+    .s-utracony{background:#7f1d1d;color:#fecaca}
     .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
-    .muted{color:#6b7280}
-    .chip-sm{border:1px solid var(--br);border-radius:999px;padding:2px 8px;margin-right:6px}
-    .nowrap{white-space:nowrap}
+    .muted{color:#9aa3af}
     .right{text-align:right}
     .center{text-align:center}
-    .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
-    .kpi .card{padding:10px 12px}
-    .sort{font-size:.8rem;color:#64748b;margin-left:6px}
+    .sort{font-size:.8rem;color:#94a3b8;margin-left:6px}
+    .btn{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:10px 14px;color:#e5e7eb}
   </style>
 </head>
 <body>
   <header class="container">
     <h1>📋 Leady</h1>
-    <p class="muted">Wyszukiwanie, sortowanie, statusy 1‑klik i szybki eksport.</p>
+    <p class="muted">Wyszukiwanie, sortowanie, status 1‑klik i eksport CSV.</p>
     <nav class="mt">
       <a class="btn" href="./index.html">← Powrót</a>
       <a class="btn" href="./contact.html">➕ Nowy kontakt</a>
+      <a class="btn" href="./followups.html">⏰ Follow‑ups</a>
     </nav>
-
-    <div class="kpi">
-      <div class="card">
-        <div class="muted">Follow-upy „na dziś”</div>
-        <div id="kpi-today" class="mono">—</div>
-      </div>
-      <div class="card">
-        <div class="muted">Łącznie leadów</div>
-        <div id="kpi-total" class="mono">—</div>
-      </div>
-    </div>
   </header>
 
   <main class="container mt">
     <section class="card">
       <div class="toolbar">
-        <input id="q" class="input grow" placeholder="Szukaj: klub, osoba, e-mail, telefon, opiekun…" />
+        <input id="q" class="input grow" placeholder="Szukaj: klub, osoba, e‑mail, telefon, opiekun…" />
         <select id="f-status" class="input">
           <option value="">Status: wszystkie</option>
           <option value="nowy">Nowy</option>
@@ -68,9 +58,7 @@
         </select>
         <select id="f-owner" class="input">
           <option value="">Opiekun: wszyscy</option>
-          <option>Piotr</option>
-          <option>Anna</option>
-          <option>Kasia</option>
+          <option>Piotr</option><option>Anna</option><option>Kasia</option>
         </select>
         <button id="btn-export" class="btn">⬇️ Eksport CSV</button>
       </div>
@@ -87,12 +75,10 @@
               <th data-sort="status" class="center">Status <span class="sort" id="s-status"></span></th>
             </tr>
           </thead>
-          <tbody id="rows">
-            <!-- rows -->
-          </tbody>
+          <tbody id="rows"></tbody>
         </table>
       </div>
-      <p class="small muted mt">Podpowiedź: kliknij w <em>Status</em>, by zmienić go jednym kliknięciem.</p>
+      <p class="small muted mt">Kliknij w <em>Status</em>, by zmienić go jednym kliknięciem.</p>
     </section>
   </main>
 
