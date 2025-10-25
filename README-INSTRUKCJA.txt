@@ -63,10 +63,19 @@ FAQ (szybko):
 
 Powodzenia! — pakiet przygotowany do bezpośredniej podmiany.
 
+
 ---
+ZMIANY W TEJ WERSJI (FINAL PRO):
+• Usunięto konflikt tras — korzystamy tylko z App Router: app/api/contacts/route.js
+• Dodano app/layout.js (wymagany przez App Router)
+• Dodano app/page.js z przekierowaniem na /contact.html
+• Formularz przeniesiony do public/contact.html (łatwe testy)
+• Dołącz /public/js/contact-api.js w każdej stronie formularza
 
-DODANE W TYM ZIP:
-• public/demo/contact.html — prosta strona do szybkiego testu POST /api/contacts
-• .env.example — wzór zmiennych środowiskowych
-
-Uwaga: Nie dołączam pages/api/contacts.js, aby uniknąć konfliktu tras.
+SZYBKA INSTRUKCJA:
+1) Vercel → Settings → Environment Variables:
+   SUPABASE_URL, SUPABASE_SERVICE_ROLE → Redeploy
+2) Supabase → SQL → uruchom sql/contacts.sql
+3) Wgraj zawartość ZIP do repo. Usuń ewentualny plik pages/api/contacts.js, jeśli istnieje.
+4) Wejdź na domenę → automatycznie przekieruje na /contact.html
+5) Wypełnij formularz → „Zapisz kontakt” → POST /api/contacts = 200
