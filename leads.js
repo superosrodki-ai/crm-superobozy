@@ -1,6 +1,13 @@
 (function () {
-  const hasConfig = typeof SUPABASE_URL === "string" && SUPABASE_URL && typeof SUPABASE_ANON_KEY === "string" && SUPABASE_ANON_KEY;
-  const supabase = hasConfig ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+  const hasConfig =
+    typeof SUPABASE_URL === "string" &&
+    SUPABASE_URL &&
+    typeof SUPABASE_ANON_KEY === "string" &&
+    SUPABASE_ANON_KEY;
+
+  const supabase = hasConfig
+    ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+    : null;
 
   const el = (id)=>document.getElementById(id);
   const rowsEl=el("rows"), qEl=el("q"), fStatus=el("f-status"), fOwner=el("f-owner"), btnExport=el("btn-export");
@@ -14,9 +21,15 @@
   const badge=(s)=>`<span class="badge s-${s}">${labels[s]||s}</span>`;
 
   async function load(){
+    rowsEl.innerHTML = '<tr><td colspan="6" class="center muted">⏳ Ładowanie danych...</td></tr>';
     if(hasConfig){
       const {data:rows,error}=await supabase.from("leads").select("*").order("created_at",{ascending:false}).limit(2000);
-      data=error?[]:(rows||[]);
+      if(error){
+        console.error("Błąd Supabase:", error.message);
+        rowsEl.innerHTML = `<tr><td colspan="6" class="center muted">⚠️ Nie udało się połączyć z bazą Supabase.<br>${error.message}</td></tr>`;
+        return;
+      }
+      data=rows||[];
     }else{
       data=JSON.parse(localStorage.getItem(DEMO_LEADS)||"[]");
     }
@@ -43,6 +56,7 @@
   }
 
   function render(){
+    if(!view.length){ rowsEl.innerHTML = `<tr><td colspan="6" class="center muted">Brak wyników.</td></tr>`; return; }
     rowsEl.innerHTML = view.map(r=>{
       const contact=[r.person||"",r.email||"",r.phone||""].filter(Boolean).join(" · ");
       return `<tr data-id="${r.id}">
@@ -74,7 +88,7 @@
 
   btnExport.addEventListener("click",()=>{
     const cols=["id","created_at","club","person","email","phone","owner","lead_score","status"];
-    const csv=[cols.join(";")].concat(view.map(r=>cols.map(k=>(Array.isArray(r[k])?r[k].join(", "):(r[k]??"")).toString().replace(/\"/g,'\"\"')).map(v=>`"${v}"`).join(";"))).join("\\n");
+    const csv=[cols.join(";")].concat(view.map(r=>cols.map(k=>(Array.isArray(r[k])?r[k].join(", "):(r[k]??"")).toString().replace(/"/g,'""')).map(v=>`"${v}"`).join(";"))).join("\n");
     const blob=new Blob([csv],{type:"text/csv;charset=utf-8"}); const url=URL.createObjectURL(blob); const a=document.createElement("a"); a.href=url; a.download="leads_export.csv"; document.body.appendChild(a); a.click(); URL.revokeObjectURL(url); a.remove();
   });
 
