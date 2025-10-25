@@ -62,3 +62,11 @@ FAQ (szybko):
 • Chcę inne kolumny – zmień sql/contacts.sql i dopasuj atrybuty name w formularzu.
 
 Powodzenia! — pakiet przygotowany do bezpośredniej podmiany.
+
+---
+
+DODANE W TYM ZIP:
+• public/demo/contact.html — prosta strona do szybkiego testu POST /api/contacts
+• .env.example — wzór zmiennych środowiskowych
+
+Uwaga: Nie dołączam pages/api/contacts.js, aby uniknąć konfliktu tras.
