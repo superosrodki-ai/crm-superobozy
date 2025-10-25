@@ -1,1 +1,5 @@
-{"cleanUrls": true, "rewrites":[{"source":"/contact","destination":"/contact.html"},{"source":"/leads","destination":"/leads.html"},{"source":"/followups","destination":"/followups.html"},{"source":"/offer","destination":"/offer.html"},{"source":"/reservation","destination":"/reservation.html"},{"source":"/","destination":"/index.html"}]}
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "outputDirectory": "."
+}
