@@ -1,193 +1,169 @@
 <!DOCTYPE html>
-<html lang="pl">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Nowy kontakt – SuperObozy</title>
-  <link rel="stylesheet" href="./styles.css?v=11" />
-  <!-- Supabase UMD (global window.supabase) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
-  <style>
-    :root{--br:#2b2f36;--muted:#9aa3af}
-    body{background:#0f172a;color:#e5e7eb}
-    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
-    .btn{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:10px 14px;color:#e5e7eb}
-    .btn:hover{filter:brightness(1.1)}
-    .btn-green{background:#065f46;border-color:#0f766e}
-    .btn-red{background:#7f1d1d;border-color:#991b1b}
-    .container{max-width:1024px;margin:0 auto;padding:18px}
-    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    @media(max-width:820px){.grid{grid-template-columns:1fr}}
-    input,select,textarea{background:#0b1220;border:1px solid #1f2937;border-radius:10px;color:#e5e7eb;padding:10px}
-    label{display:flex;flex-direction:column;gap:6px}
-    .mt{margin-top:14px}
-    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
-    .chips{display:flex;gap:8px;flex-wrap:wrap}
-    .chip{border:1px solid #334155;border-radius:999px;padding:6px 10px;cursor:pointer;background:#0b1220}
-    .chip.active{background:#064e3b;border-color:#10b981}
-    .grid-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
-    @media (max-width:1024px){.grid-2{grid-template-columns:1fr}}
-    .timeline{max-height:420px;overflow:auto;border:1px dashed #334155;border-radius:10px;padding:10px;background:#0b1220}
-    .subtle{color:#9aa3af}
-    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
-  </style>
-</head>
-<body>
-  <header class="container">
-    <h1>👤 Nowy kontakt</h1>
-    <p class="subtle">Zapisy, follow-up i szablony. Z prawej – timeline aktywności.</p>
-    <nav class="mt">
-      <a class="btn" href="./index.html">← Powrót</a>
-      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
-      <a class="btn" href="./followups.html">⏰ Follow‑ups</a>
-    </nav>
-  </header>
+<html lang="pl" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>SuperObozy CRM — kontakt</title>
+    <link rel="stylesheet" href="./styles.css" />
 
-  <main class="container mt grid-2">
-    <section>
-      <section class="card">
-        <form id="contact-form" class="grid">
-          <label>Źródło
-            <select name="source" id="source">
-              <option>Telefon</option><option>E-mail</option>
-              <option selected>Formularz www</option><option>Facebook</option>
-              <option>Instagram</option><option>Inne</option>
-            </select>
-          </label>
-          <label>Opiekun
-            <select name="owner" id="owner">
-              <option>Piotr</option><option>Anna</option><option>Kasia</option>
-            </select>
-          </label>
+    <style>
+      /* FORCE LIGHT THEME */
+      body{ background:#f6f7fb !important; color:#0f172a !important; }
+      .card{ background:#ffffff !important; color:#0f172a !important; border:1px solid #e5e7eb !important; }
+      .page{ background:#fff !important; border-color:#e5e7eb !important; }
+      input,select,textarea{
+        background:#fff !important; color:#0f172a !important;
+        border:1px solid #d0d7de !important;
+      }
+      .camp{ background:#f1f5f9 !important; color:#334155 !important; border-color:#e5e7eb !important; }
+      .camp:has(input:checked){ background:#eaf6ff !important; color:#064e80 !important; border-color:#cae9ff !important; }
+      .btn{ color:#fff !important; }
+      .primary{ background:#0ea5e9 !important; }
+      .wa{ background:#2b9348 !important; }
+      .ghost{ background:#fff !important; color:#475569 !important; border:1px solid #e5e7eb !important; }
+      .small,.help{ color:#64748b !important; }
+    </style>
+  </head>
 
-          <label>Klub / Szkoła <input name="club" id="club" placeholder="np. UKS Orlik" required /></label>
-          <label>Osoba <input name="person" id="person" placeholder="np. Anna Kowalska" /></label>
+  <body>
+    <div class="shell">
+      <div class="header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div class="brand">🌲 SuperObozy — <span style="color:#0ea5e9">CRM</span></div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <button id="themeToggle" class="ghost btn" type="button">☀️ Jasny</button>
+        </div>
+      </div>
 
-          <label>Telefon <input name="phone" id="phone" placeholder="+48 600 700 800" /></label>
-          <label>E-mail <input name="email" id="email" type="email" placeholder="kontakt@klub.pl" /></label>
+      <div class="page">
+        <div class="card">
+          <h3>🧑‍💼 Nowy kontakt</h3>
+          <p class="small">Zapisz kontakt, follow-up i notatki. Po dodaniu możesz od razu otworzyć WhatsApp.</p>
 
-          <label>Dyscyplina <input name="discipline" id="discipline" placeholder="np. piłka nożna / judo" /></label>
-          <label>Uczestników <input name="participants" id="participants" type="number" min="1" placeholder="np. 45" /></label>
+          <div class="grid2">
+            <div class="field">
+              <label>Źródło</label>
+              <select id="source"><option>Telefon</option><option>Mail</option><option>Formularz www</option><option>FB/IG</option><option>Inne</option></select>
+            </div>
+            <div class="field">
+              <label>Opiekun</label>
+              <input id="owner" placeholder="np. Piotr" />
+            </div>
 
-          <label>Zaplecze <input name="facilities" id="facilities" placeholder="np. hala, boisko" /></label>
-          <label>Termin (okno) <input name="date_window" id="date_window" placeholder="np. 15–28 lipca" /></label>
+            <div class="field">
+              <label>Klub / Szkoła</label>
+              <input id="club" placeholder="np. UKS Orlik" />
+            </div>
+            <div class="field">
+              <label>Osoba</label>
+              <input id="person" placeholder="np. Anna Kowalska" />
+            </div>
 
-          <label style="grid-column:1/-1">Lokalizacja preferowana
-            <input name="pref_location" id="pref_location" placeholder="np. zachodniopomorskie / morze" />
-          </label>
-        </form>
+            <div class="field">
+              <label>Telefon</label>
+              <input id="phone" placeholder="+48 600 700 800" />
+            </div>
+            <div class="field">
+              <label>E-mail</label>
+              <input id="email" placeholder="kontakt@klub.pl" />
+            </div>
 
-        <div class="mt">
-          <strong>Zainteresowany campami:</strong>
-          <div class="chips" id="camps">
-            <div class="chip" data-v="Jastrowie">Jastrowie</div>
-            <div class="chip" data-v="Lipka">Lipka</div>
-            <div class="chip" data-v="Dąbki">Dąbki</div>
-            <div class="chip" data-v="Pobierowo">Pobierowo</div>
-            <div class="chip" data-v="Rewal">Rewal</div>
+            <div class="field">
+              <label>Dyscyplina</label>
+              <input id="sport" placeholder="np. piłka nożna / judo" />
+            </div>
+            <div class="field">
+              <label>Uczestników</label>
+              <input id="participants" type="number" min="1" step="1" />
+            </div>
+
+            <div class="field">
+              <label>Zaplecze</label>
+              <input id="facilities" placeholder="np. hala, boisko" />
+            </div>
+            <div class="field">
+              <label>Termin (okno)</label>
+              <input id="term_window" placeholder="np. 15–28 lipca" />
+            </div>
+
+            <div class="field grid1" style="grid-column:1 / -1">
+              <label>Lokalizacja preferowana</label>
+              <input id="location_pref" placeholder="np. zachodniopomorskie / morze" />
+            </div>
+          </div>
+
+          <div class="section-title">Zainteresowany campami:</div>
+          <div class="campbar">
+            <label class="camp"><input type="checkbox" id="camp_jastrowie"> Jastrowie</label>
+            <label class="camp"><input type="checkbox" id="camp_lipka"> Lipka</label>
+            <label class="camp"><input type="checkbox" id="camp_dabki"> Dąbki</label>
+            <label class="camp"><input type="checkbox" id="camp_pobierowo"> Pobierowo</label>
+            <label class="camp"><input type="checkbox" id="camp_rewal"> Rewal</label>
+          </div>
+
+          <div class="grid2" style="margin-top:12px;">
+            <div class="field">
+              <label>Notatki</label>
+              <textarea id="notes" placeholder="Ustalenia z rozmowy..."></textarea>
+            </div>
+            <div class="field">
+              <label>Follow-up</label>
+              <select id="followUpDays">
+                <option value="0">— brak —</option>
+                <option value="2">za 2 dni</option>
+                <option value="3" selected>za 3 dni</option>
+                <option value="5">za 5 dni</option>
+                <option value="7">za 7 dni</option>
+              </select>
+              <div class="help">Po zapisaniu możesz od razu otworzyć WhatsApp.</div>
+            </div>
+          </div>
+
+          <div class="bar">
+            <button class="btn primary" id="btnAdd">💾 Zapisz nowy kontakt</button>
+            <button class="btn wa" id="btnAddAndWA">💾🟢 Zapisz i otwórz WhatsApp</button>
           </div>
         </div>
 
-        <div class="grid mt">
-          <label>Status
-            <select id="status">
-              <option value="nowy" selected>Nowy</option>
-              <option value="w_trakcie">W trakcie</option>
-              <option value="oferta_wyslana">Oferta wysłana</option>
-              <option value="umowa">Umowa</option>
-              <option value="utracony">Utracony</option>
-            </select>
-          </label>
-          <label>Priorytet
-            <select id="priority">
-              <option>Niski</option><option selected>Średni</option><option>Wysoki</option>
-            </select>
-          </label>
-        </div>
-
-        <form class="grid mt" id="contact-meta">
-          <label style="grid-column:1/-1">Notatki
-            <textarea name="notes" id="notes" rows="4" placeholder="Dodatkowe informacje…"></textarea>
-          </label>
-          <label>Follow-up
-            <select name="follow_up" id="follow_up">
-              <option value="1">jutro</option><option value="3" selected>za 3 dni</option>
-              <option value="7">za tydzień</option><option value="14">za 2 tygodnie</option>
-            </select>
-          </label>
-          <label>Zgody (RODO)
-            <select id="consent">
-              <option value="brak" selected>Brak</option>
-              <option value="marketing">Marketing</option>
-              <option value="kontakt">Kontakt zwrotny</option>
-              <option value="wszystkie">Wszystkie</option>
-            </select>
-          </label>
-        </form>
-
-        <div class="toolbar mt">
-          <button class="btn" id="save-only" data-action="save-only">💾 Zapisz nowy kontakt</button>
-          <button class="btn btn-green" id="save-and-wa" data-action="save-and-wa">💬 Zapisz i otwórz WhatsApp</button>
-          <button class="btn" id="templates" data-action="templates">📄 Szablony wiadomości</button>
-          <button class="btn btn-red" id="reset" data-action="reset">🧹 Wyczyść</button>
-        </div>
-
-        <section class="card mt">
-          <h3>⚡ Szybkie wiadomości</h3>
-          <div class="toolbar mt">
-            <button class="btn" id="btn-sms" data-action="sms">📱 Kopiuj SMS</button>
-            <button class="btn" id="btn-email" data-action="email">✉️ Otwórz e‑mail</button>
-            <button class="btn" id="btn-wa" data-action="wa">🟩 Otwórz WhatsApp</button>
+        <!-- LISTA LEADÓW -->
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>📋 Leady</h3>
+            <button class="btn ghost" id="btnReload" style="color:#334155;">🔄 Odśwież listę</button>
           </div>
-          <p class="subtle mt">Teksty bazują na Twoich wzorcach. Uzupełnią się danymi z formularza.</p>
-          <pre id="preview" class="mono" style="white-space:pre-wrap;border:1px dashed #334155;border-radius:10px;padding:12px;margin-top:10px;background:#0b1220"></pre>
-        </section>
-      </section>
-
-      <aside>
-        <section class="card">
-          <h3>🕓 Timeline aktywności</h3>
-          <div id="timeline" class="timeline"></div>
-        </section>
-      </aside>
-    </section>
-  </main>
-
-  <dialog id="dlg" class="card" style="padding:0">
-    <div style="padding:14px;border-bottom:1px dashed #334155"><strong>📄 Szablony wiadomości</strong></div>
-    <div style="padding:14px">
-      <p class="subtle">Możesz edytować i zapisać jako domyślne (localStorage / konto przeglądarki).</p>
-      <label>SMS / Messenger
-        <textarea id="tpl-sms" rows="3">Dziękuję za kontakt! Proszę o liczbę osób, dyscyplinę i termin przyjazdu, żeby przygotować zaplecze sportowe i bazę noclegowo-żywieniową. Pozdrawiam, Piotr – SuperObozy.pl</textarea>
-      </label>
-      <div class="mt"></div>
-      <label>E-mail (temat)
-        <input id="tpl-mail-subj" value="Wstępna oferta obozu – SuperObozy.pl" />
-      </label>
-      <label>E-mail (treść)
-        <textarea id="tpl-mail-body" rows="8">Dzień dobry {PERSON},
-
-dziękuję za kontakt w sprawie obozu dla {CLUB}. Żeby dobrze dobrać obiekt i zaplecze, proszę o:
-• liczbę uczestników,
-• dyscyplinę / profil,
-• orientacyjny termin.
-
-Nasze ośrodki mają opinię PSP, halę/boiska w pobliżu i pełne wyżywienie.
-
-Pozdrawiam
-Piotr Gołąb
-SuperObozy.pl
-tel. 604 936 806
-        </textarea>
-      </label>
+          <table class="table">
+            <thead>
+              <tr><th>ID</th><th>Klub</th><th>Osoba</th><th>Tel</th><th>Status</th><th>Następny kontakt</th></tr>
+            </thead>
+            <tbody id="leadBody"></tbody>
+          </table>
+          <div class="small">Kliknij w wiersz, aby otworzyć „Kartę klienta”.</div>
+        </div>
+      </div>
     </div>
-    <div style="display:flex;gap:8px;justify-content:flex-end;padding:14px;border-top:1px dashed #334155">
-      <button class="btn" id="dlg-cancel">Anuluj</button>
-      <button class="btn btn-green" id="dlg-save">Zapisz szablony</button>
-    </div>
-  </dialog>
 
-  <script src="./config.js"></script>
-  <script src="./app.js" defer></script>
-</body>
+    <!-- Importy -->
+    <script src="./config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="./app.js" defer></script>
+
+    <!-- Przełącznik motywu -->
+    <script>
+      (function(){
+        const root=document.documentElement;
+        const saved=localStorage.getItem('crm-theme');
+        if(saved) root.setAttribute('data-theme', saved);
+        const btn=document.getElementById('themeToggle');
+        if(btn){
+          const label=()=>btn.textContent = root.getAttribute('data-theme')==='dark' ? '🌙 Ciemny' : '☀️ Jasny';
+          label();
+          btn.addEventListener('click',()=>{
+            const next = root.getAttribute('data-theme')==='dark' ? 'light' : 'dark';
+            root.setAttribute('data-theme', next);
+            localStorage.setItem('crm-theme', next);
+            label();
+          });
+        }
+      })();
+    </script>
+  </body>
 </html>
