@@ -1,24 +1,111 @@
-<!doctype html><html lang="pl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Dodaj kontakt</title>
-<style>body{font-family:system-ui;max-width:900px;margin:40px auto;padding:0 16px}
-label{display:block;margin:8px 0 6px;font-weight:600}input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}button{padding:12px 18px;border:0;border-radius:10px;background:#111;color:#fff;font-weight:700;cursor:pointer}</style>
-<script src="/js/contact-api.js" defer></script></head><body>
-<h1>Dodaj kontakt</h1>
-<form id="contactForm">
-<div class="row"><div><label>Źródło</label><input name="source"/></div><div><label>Opiekun</label><input name="owner"/></div></div>
-<div class="row"><div><label>Klub</label><input name="club"/></div><div><label>Osoba</label><input name="person"/></div></div>
-<div class="row"><div><label>Telefon</label><input name="phone"/></div><div><label>Email</label><input name="email" value="kontakt@superosrodki.pl"/></div></div>
-<div class="row"><div><label>Dyscyplina</label><input name="discipline"/></div><div><label>Liczba uczestników</label><input name="participants" type="number"/></div></div>
-<div class="row"><div><label>Obiekty</label><input name="facilities"/></div><div><label>Termin</label><input name="term"/></div></div>
-<div class="row"><div><label>Lokalizacja</label><input name="location"/></div><div><label>Status</label><input name="status"/></div></div>
-<div class="row"><div><label>Priorytet</label><input name="priority"/></div><div><label>Obozy</label>
-<label><input type="checkbox" name="camps" value="lato"> Lato</label>
-<label><input type="checkbox" name="camps" value="zima"> Zima</label>
-<label><input type="checkbox" name="camps" value="ferie"> Ferie</label>
-</div></div>
-<label>Notatki</label><textarea name="notes" rows="3"></textarea>
-<button id="saveContactBtn">Zapisz kontakt</button>
-</form>
-</body></html>
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kontakt — CRM SuperObozy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu;max-width:960px;margin:40px auto;padding:0 16px}
+    h1{margin:0 0 12px}
+    .card{border:1px solid #e6e6e6;border-radius:12px;padding:16px;margin:16px 0}
+    label{display:block;margin:8px 0 6px;font-weight:600}
+    input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:10px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    button{padding:12px 18px;border:0;border-radius:12px;background:#111;color:#fff;font-weight:700;cursor:pointer}
+    .muted{color:#666;font-size:13px}
+  </style>
+  <script src="/js/contact-api.js" defer></script>
+</head>
+<body>
+  <h1>Dodaj kontakt</h1>
+  <p class="muted">Wypełnij formularz i kliknij „Zapisz kontakt” — dane trafią do Supabase.</p>
+  <form id="contactForm">
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>Źródło (source)</label>
+          <input name="source" placeholder="np. telefon, FB, www" />
+        </div>
+        <div>
+          <label>Opiekun (owner)</label>
+          <input name="owner" placeholder="np. Piotr Gołąb" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Klub/Instytucja (club)</label>
+          <input name="club" placeholder="np. UKS Orzeł" />
+        </div>
+        <div>
+          <label>Osoba kontaktowa (person)</label>
+          <input name="person" placeholder="Imię i nazwisko" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Telefon (phone)</label>
+          <input name="phone" placeholder="+48 ..." />
+        </div>
+        <div>
+          <label>E-mail (email)</label>
+          <input name="email" placeholder="kontakt@superosrodki.pl" />
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label>Dyscyplina (discipline)</label>
+          <input name="discipline" placeholder="np. judo, piłka nożna" />
+        </div>
+        <div>
+          <label>Liczba uczestników (participants)</label>
+          <input name="participants" type="number" placeholder="np. 50" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Obiekty (facilities)</label>
+          <input name="facilities" placeholder="hala, boisko, tatami, ..." />
+        </div>
+        <div>
+          <label>Termin (term)</label>
+          <input name="term" placeholder="np. 10–20 lipca 2026" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Lokalizacja (location)</label>
+          <input name="location" placeholder="np. Rewal, Pobierowo" />
+        </div>
+        <div>
+          <label>Status</label>
+          <input name="status" placeholder="np. nowy, w toku, wygrany" />
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>Priorytet</label>
+          <input name="priority" placeholder="np. wysoki/normalny" />
+        </div>
+        <div>
+          <label>Obozy (camps)</label>
+          <div>
+            <label><input type="checkbox" name="camps" value="lato"> Lato</label>
+            <label><input type="checkbox" name="camps" value="zima"> Zima</label>
+            <label><input type="checkbox" name="camps" value="ferie"> Ferie</label>
+          </div>
+        </div>
+      </div>
+      <label>Notatki (notes)</label>
+      <textarea name="notes" rows="4" placeholder="Wpisz ważne info..."></textarea>
+    </div>
+
+    <button id="saveContactBtn">Zapisz kontakt</button>
+  </form>
+
+  <p class="muted">Po kliknięciu sprawdź w DevTools → Network czy POST /api/contacts zwraca 200 OK.</p>
+</body>
+</html>
