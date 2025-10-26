@@ -1,13 +1,3 @@
 {
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/contact.html"
-    }
-  ],
-  "functions": {
-    "api/**/*.js": {
-      "runtime": "nodejs20.x"
-    }
-  }
+  "framework": "nextjs"
 }
