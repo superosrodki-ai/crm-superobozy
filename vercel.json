@@ -1,5 +1,11 @@
 {
-  "version": 2,
-  "builds": [{ "src": "index.html", "use": "@vercel/static" }],
-  "routes": [{ "src": "/(.*)", "dest": "/index.html" }]
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/",            "destination": "/index.html" },
+    { "source": "/contact",     "destination": "/contact.html" },
+    { "source": "/leads",       "destination": "/leads.html" },
+    { "source": "/followups",   "destination": "/followups.html" },
+    { "source": "/offer",       "destination": "/offer.html" },
+    { "source": "/reservation", "destination": "/reservation.html" }
+  ]
 }
