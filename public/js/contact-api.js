@@ -7,11 +7,10 @@
       if (k === 'participants') {
         obj[k] = v ? parseInt(v, 10) : null;
       } else if (k === 'camps') {
-        // obsługa wielu checkboxów name="camps"
         obj[k] = obj[k] || [];
         obj[k].push(v);
       } else {
-        obj[k] = v;
+        obj[k] = v || null;
       }
     }
     return obj;
@@ -23,7 +22,9 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
-    const json = await res.json();
+    const txt = await res.text();
+    let json;
+    try{ json = JSON.parse(txt); } catch(e){ throw new Error('Błąd serwera'); }
     if (!res.ok) throw new Error(json.error || 'Błąd zapisu');
     return json.data;
   }
@@ -36,6 +37,7 @@
     btn.addEventListener('click', async (e)=>{
       e.preventDefault();
       btn.disabled = true;
+      btn.textContent = 'Zapisywanie...';
       try {
         const payload = formToPayload(form);
         await saveContact(payload);
@@ -45,6 +47,7 @@
         alert('Błąd: ' + (err.message || err));
       } finally {
         btn.disabled = false;
+        btn.textContent = '💾 Zapisz kontakt';
       }
     });
   }
