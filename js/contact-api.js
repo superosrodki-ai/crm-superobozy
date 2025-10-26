@@ -1,4 +1,4 @@
-// js/contact-api.js (Classic Light)
+// js/contact-api.js
 (function(){
   function formToPayload(form){
     const fd = new FormData(form);
@@ -12,7 +12,8 @@
   }
   async function saveContact(payload){
     const res = await fetch('/api/contacts', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(payload) });
-    const json = await res.json();
+    const text = await res.text(); let json;
+    try{ json = JSON.parse(text); }catch(_){ json = { error: text }; }
     if (!res.ok) throw new Error(json.error || 'Błąd zapisu');
     return json.data;
   }
