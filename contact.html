@@ -1,46 +1,65 @@
 <!doctype html><html lang="pl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Dodaj kontakt — PRO (Static)</title>
-<link rel="icon" href="/logo.svg">
-<style>
-:root{color-scheme:dark light}
-body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e14;color:#e6e9ef;max-width:1100px;margin:32px auto;padding:0 16px}
-h1{margin:0 0 18px 0}
-label{display:block;margin:8px 0 6px;font-weight:600}
-input,textarea,select{width:100%;padding:10px;border:1px solid #1b1f2a;border-radius:10px;background:#111522;color:#e6e9ef}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-button{padding:12px 18px;border:0;border-radius:10px;background:#2563eb;color:#fff;font-weight:700;cursor:pointer}
-fieldset{border:1px solid #1b1f2a;border-radius:12px;padding:12px;margin-top:8px}
-legend{opacity:.8}
-.note{opacity:.8;font-size:13px;margin-top:8px}
-.card{padding:14px;border:1px solid #1b1f2a;border-radius:12px;background:#0f1422}
-nav a{color:#9ecbff;text-decoration:none;margin-right:14px}
-</style>
-<script src="/js/contact-api.js" defer></script></head><body>
-<nav>
-  <a href="/contact.html">Dodaj kontakt</a>
-  <a href="/admin.html">Dashboard</a>
-</nav>
-<div class="card">
-<h1>Nowy kontakt</h1>
-<form id="contactForm">
-<div class="row"><div><label>Źródło</label><input name="source" placeholder="Formularz www"/></div><div><label>Opiekun</label><input name="owner" value="Piotr"/></div></div>
-<div class="row"><div><label>Klub / Szkoła</label><input name="club" placeholder="np. UKS Judo"/></div><div><label>Osoba</label><input name="person" placeholder="imię i nazwisko"/></div></div>
-<div class="row"><div><label>Telefon</label><input name="phone" placeholder="+48..."/></div><div><label>E-mail</label><input name="email" value="kontakt@superosrodki.pl"/></div></div>
-<div class="row"><div><label>Dyscyplina</label><input name="discipline" placeholder="np. judo"/></div><div><label>Uczestników</label><input name="participants" type="number" placeholder="np. 60"/></div></div>
-<div class="row"><div><label>Zaplecze</label><input name="facilities" placeholder="hala, boisko..."/></div><div><label>Termin (okno)</label><input name="term" placeholder="lipiec 2026"/></div></div>
-<div class="row"><div><label>Lokalizacja preferowana</label><input name="location" placeholder="Dąbki / Rewal / Pobierowo"/></div><div><label>Status</label><input name="status" value="Nowy"/></div></div>
-<div class="row"><div><label>Priorytet</label><input name="priority" value="Średni"/></div>
-<div><fieldset><legend>Zainteresowany campami:</legend>
-<label><input type="checkbox" name="camps" value="Jastrowie"> Jastrowie</label>
-<label><input type="checkbox" name="camps" value="Lipka"> Lipka</label>
-<label><input type="checkbox" name="camps" value="Dąbki"> Dąbki</label>
-<label><input type="checkbox" name="camps" value="Pobierowo"> Pobierowo</label>
-<label><input type="checkbox" name="camps" value="Rewal"> Rewal</label>
-</fieldset></div></div>
-<label>Notatki</label><textarea name="notes" rows="3" placeholder="Dodatkowe info..."></textarea>
-<div class="note">Po zapisaniu kontaktu zobaczysz listę w zakładce <a href="/admin.html">Dashboard</a>.</div>
-<button id="saveContactBtn">💾 Zapisz kontakt</button>
-</form>
+<title>Dodaj kontakt — CRM Classic Light</title>
+<link rel="icon" href="/assets/logo.svg">
+<link rel="stylesheet" href="/assets/style.css">
+<script src="/js/contact-api.js" defer></script>
+</head><body>
+<header>
+  <div class="header-inner container">
+    <img src="/assets/logo.svg" alt="CRM SuperObozy"/>
+    <h1>CRM SuperObozy — Classic Light</h1>
+    <nav>
+      <a href="/contact.html">Dodaj kontakt</a>
+      <a href="/admin.html">Dashboard</a>
+    </nav>
+  </div>
+</header>
+<div class="container">
+  <div class="card">
+    <h2>Nowy kontakt</h2>
+    <form id="contactForm">
+      <div class="grid-2">
+        <div><label>Źródło</label><input name="source" placeholder="Formularz www"></div>
+        <div><label>Opiekun</label><input name="owner" value="Piotr"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Klub / Szkoła</label><input name="club" placeholder="np. UKS Judo"></div>
+        <div><label>Osoba</label><input name="person" placeholder="imię i nazwisko"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Telefon</label><input name="phone" placeholder="+48..."></div>
+        <div><label>E-mail</label><input name="email" value="kontakt@superosrodki.pl"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Dyscyplina</label><input name="discipline" placeholder="np. judo"></div>
+        <div><label>Uczestników</label><input name="participants" type="number" placeholder="np. 60"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Zaplecze</label><input name="facilities" placeholder="hala, boisko..."></div>
+        <div><label>Termin (okno)</label><input name="term" placeholder="lipiec 2026"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Lokalizacja preferowana</label><input name="location" placeholder="Dąbki / Rewal / Pobierowo"></div>
+        <div><label>Status</label><input name="status" value="Nowy"></div>
+      </div>
+      <div class="grid-2">
+        <div><label>Priorytet</label><input name="priority" value="Średni"></div>
+        <div>
+          <fieldset><legend>Zainteresowany campami:</legend>
+            <label><input type="checkbox" name="camps" value="Jastrowie"> Jastrowie</label>
+            <label><input type="checkbox" name="camps" value="Lipka"> Lipka</label>
+            <label><input type="checkbox" name="camps" value="Dąbki"> Dąbki</label>
+            <label><input type="checkbox" name="camps" value="Pobierowo"> Pobierowo</label>
+            <label><input type="checkbox" name="camps" value="Rewal"> Rewal</label>
+          </fieldset>
+        </div>
+      </div>
+      <label>Notatki</label>
+      <textarea name="notes" rows="3" placeholder="Dodatkowe info..."></textarea>
+      <p class="muted">Po zapisaniu kontaktu zobaczysz listę w zakładce <a href="/admin.html">Dashboard</a>.</p>
+      <button class="btn" id="saveContactBtn">💾 Zapisz kontakt</button>
+    </form>
+  </div>
 </div>
 </body></html>

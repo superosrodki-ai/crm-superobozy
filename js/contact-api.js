@@ -1,4 +1,4 @@
-// js/contact-api.js
+// js/contact-api.js (Classic Light)
 (function(){
   function formToPayload(form){
     const fd = new FormData(form);
