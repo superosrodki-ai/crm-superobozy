@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>console.log('app.example.js – podmień na swój app.js jeśli już masz'));
