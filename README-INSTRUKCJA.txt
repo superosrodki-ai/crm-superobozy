@@ -65,17 +65,13 @@ Powodzenia! — pakiet przygotowany do bezpośredniej podmiany.
 
 
 ---
-ZMIANY W TEJ WERSJI (FINAL PRO):
-• Usunięto konflikt tras — korzystamy tylko z App Router: app/api/contacts/route.js
-• Dodano app/layout.js (wymagany przez App Router)
-• Dodano app/page.js z przekierowaniem na /contact.html
-• Formularz przeniesiony do public/contact.html (łatwe testy)
-• Dołącz /public/js/contact-api.js w każdej stronie formularza
+WAŻNE (404 na Vercel):
+Jeśli wrzucasz projekt metodą „Add files via upload”, Vercel uzna go za stronę statyczną,
+dopóki nie ma pliku package.json. Ten ZIP zawiera package.json, więc Vercel wykryje Next.js,
+zbuduje App Router i uruchomi API: /api/contacts.
 
-SZYBKA INSTRUKCJA:
-1) Vercel → Settings → Environment Variables:
-   SUPABASE_URL, SUPABASE_SERVICE_ROLE → Redeploy
-2) Supabase → SQL → uruchom sql/contacts.sql
-3) Wgraj zawartość ZIP do repo. Usuń ewentualny plik pages/api/contacts.js, jeśli istnieje.
-4) Wejdź na domenę → automatycznie przekieruje na /contact.html
-5) Wypełnij formularz → „Zapisz kontakt” → POST /api/contacts = 200
+Kroki:
+1) Wgraj cały ZIP jako repo (albo rozpakuj i push do Git).
+2) Vercel -> Import Project -> wybierz to repo -> Framework: Next.js (auto).
+3) Ustaw env: SUPABASE_URL, SUPABASE_SERVICE_ROLE -> Redeploy.
+4) Wejdź na / -> przekieruje do /contact.html.
