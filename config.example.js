@@ -1,9 +1,1 @@
-// SKOPIUJ TEN PLIK I ZAPISZ JAKO: config.js
-// UZUPEŁNIJ SWOJE KLUCZE Z SUPABASE (Project Settings → API)
-
-window.SUPABASE_URL = "https://TWÓJ-PROJECT-URL.supabase.co";
-window.SUPABASE_ANON_KEY = "TWÓJ-ANON-PUBLIC-KEY";
-
-// USTAWIENIA MARKI
-window.BRAND_DEFAULT_OWNER = "Piotr";   // domyślny opiekun
-window.BRAND_PL_PREFIX = "+48";         // prefiks PL do WhatsApp
+const SUPABASE_URL="https://TWOJ.supabase.co";const SUPABASE_ANON_KEY="twój_anon_key";window.SUPABASE_URL=SUPABASE_URL;window.SUPABASE_ANON_KEY=SUPABASE_ANON_KEY;
