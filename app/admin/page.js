@@ -1,18 +1,15 @@
-// app/admin/page.js
+export const dynamic = 'force-dynamic';
 async function getContacts() {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || ''}/api/contacts`, { cache: 'no-store' });
+  const res = await fetch('/api/contacts', { cache: 'no-store' });
   if (!res.ok) return { error: await res.text() };
   return res.json();
 }
-
-export const dynamic = 'force-dynamic';
-
 export default async function AdminPage(){
   const data = await getContacts();
   const items = data?.data || [];
   return (
     <section>
-      <h1 style={{margin:'12px 0 18px'}}>📊 Kontakty</h1>
+      <h1>📊 Kontakty</h1>
       {data?.error && <p style={{color:'#ff9b9b'}}>Błąd: {data.error}</p>}
       <div style={{display:'grid',gap:12}}>
         <div style={{display:'grid',gridTemplateColumns:'1fr 1fr 1fr 1fr 80px',gap:8,opacity:0.8}}>
