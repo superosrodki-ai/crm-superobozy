@@ -1,22 +1,24 @@
 <!doctype html><html lang="pl"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Dodaj kontakt — CRM SuperObozy</title>
+<title>Dodaj kontakt</title>
 <style>body{font-family:system-ui;max-width:900px;margin:40px auto;padding:0 16px}
 label{display:block;margin:8px 0 6px;font-weight:600}input,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}button{padding:12px 18px;border:0;border-radius:10px;background:#111;color:#fff;font-weight:700;cursor:pointer}</style>
 <script src="/js/contact-api.js" defer></script></head><body>
 <h1>Dodaj kontakt</h1>
 <form id="contactForm">
-<div class="row"><div><label>Źródło</label><input name="source"/></div><div><label>Opiekun</label><input name="owner" value="Piotr Gołąb"/></div></div>
+<div class="row"><div><label>Źródło</label><input name="source"/></div><div><label>Opiekun</label><input name="owner"/></div></div>
 <div class="row"><div><label>Klub</label><input name="club"/></div><div><label>Osoba</label><input name="person"/></div></div>
 <div class="row"><div><label>Telefon</label><input name="phone"/></div><div><label>Email</label><input name="email" value="kontakt@superosrodki.pl"/></div></div>
 <div class="row"><div><label>Dyscyplina</label><input name="discipline"/></div><div><label>Liczba uczestników</label><input name="participants" type="number"/></div></div>
 <div class="row"><div><label>Obiekty</label><input name="facilities"/></div><div><label>Termin</label><input name="term"/></div></div>
-<div class="row"><div><label>Lokalizacja</label><input name="location" value="Pobierowo"/></div><div><label>Status</label><input name="status" value="nowy"/></div></div>
-<div class="row"><div><label>Priorytet</label><input name="priority" value="normalny"/></div><div><label>Obozy</label>
+<div class="row"><div><label>Lokalizacja</label><input name="location"/></div><div><label>Status</label><input name="status"/></div></div>
+<div class="row"><div><label>Priorytet</label><input name="priority"/></div><div><label>Obozy</label>
 <label><input type="checkbox" name="camps" value="lato"> Lato</label>
 <label><input type="checkbox" name="camps" value="zima"> Zima</label>
-<label><input type="checkbox" name="camps" value="ferie"> Ferie</label></div></div>
+<label><input type="checkbox" name="camps" value="ferie"> Ferie</label>
+</div></div>
 <label>Notatki</label><textarea name="notes" rows="3"></textarea>
 <button id="saveContactBtn">Zapisz kontakt</button>
-</form></body></html>
+</form>
+</body></html>
