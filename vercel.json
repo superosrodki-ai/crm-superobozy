@@ -1,1 +1,8 @@
-{"framework":"nextjs","buildCommand":"next build","rewrites":[{"source":"/","destination":"/contact.html"}]}
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/contact.html"
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+<!doctype html><html lang="pl"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Dashboard — PRO (Static)</title>
+<link rel="icon" href="/logo.svg">
+<style>
+:root{color-scheme:dark light}
+body{font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e14;color:#e6e9ef;max-width:1100px;margin:32px auto;padding:0 16px}
+h1{margin:0 0 18px 0}
+.card{padding:14px;border:1px solid #1b1f2a;border-radius:12px;background:#0f1422}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 80px;gap:8}
+.head{opacity:.8}
+.row{padding:10px;border:1px solid #1b1f2a;border-radius:10px;background:#111522}
+nav a{color:#9ecbff;text-decoration:none;margin-right:14px}
+</style>
+</head><body>
+<nav>
+  <a href="/contact.html">Dodaj kontakt</a>
+  <a href="/admin.html">Dashboard</a>
+</nav>
+<h1>📊 Kontakty</h1>
+<div class="grid head"><strong>Klub</strong><strong>Osoba</strong><strong>Telefon</strong><strong>E-mail</strong><strong>Osób</strong></div>
+<div id="list" style="display:grid;gap:12px;margin-top:8px"></div>
+<script>
+async function load(){
+  const res = await fetch('/api/contacts');
+  const json = await res.json();
+  const items = json.data || [];
+  const list = document.getElementById('list');
+  list.innerHTML = '';
+  items.forEach(r=>{
+    const div = document.createElement('div');
+    div.className='grid row';
+    div.innerHTML = `<div>${r.club||'—'}</div><div>${r.person||'—'}</div><div>${r.phone||'—'}</div><div>${r.email||'—'}</div><div>${r.participants??'—'}</div>`;
+    list.appendChild(div);
+  });
+}
+load();
+</script>
+</body></html>
