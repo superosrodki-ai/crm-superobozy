@@ -1,1 +1,43 @@
-<!DOCTYPE html><html lang='pl' data-theme='light'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><title>Rezerwacja</title><link rel='stylesheet' href='./styles.css'/></head><body><div class='shell'><div class='header'><div class='brand'>🌲 SuperObozy — <span style='color:var(--brand)'>CRM</span></div><a class='btn ghost' href='./index.html' style='color:#334155'>← Powrót</a></div><div class='page'><div class='card'><h3>Rezerwacja</h3><p class='small'>Placeholder.</p></div></div></div></body></html>
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nowa rezerwacja – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=6" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <header class="container">
+    <h1>📅 Nowa rezerwacja</h1>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+    </nav>
+  </header>
+
+  <main class="container mt">
+    <section class="card">
+      <form id="reservation-form" class="grid">
+        <label>Nazwa kontrahenta <input name="client" placeholder="UKS Orzeł" /></label>
+        <label>Kontakt e-mail <input name="email" type="email" placeholder="kontakt@superosrodki.pl" /></label>
+        <label>Od <input name="from" type="date" /></label>
+        <label>Do <input name="to" type="date" /></label>
+        <label>Miejsca <input name="seats" type="number" min="1" value="50" /></label>
+        <label>Obiekt/pokoje
+          <select name="facility">
+            <option>Pawilon A – 25 pokoi</option>
+            <option>Pawilon B – 40 pokoi</option>
+          </select>
+        </label>
+      </form>
+      <div class="toolbar mt">
+        <button class="btn" id="save-res">💾 Zapisz rezerwację (DEMO)</button>
+      </div>
+    </section>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

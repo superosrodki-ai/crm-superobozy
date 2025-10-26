@@ -1,3 +1,11 @@
-// Wklej swoje klucze Supabase, aby działał ONLINE zapis do bazy
-const SUPABASE_URL = "";      // np. "https://abcd1234.supabase.co"
-const SUPABASE_ANON_KEY = ""; // publiczny anon key
+
+/**
+ * Jeśli chcesz zapisywać w Supabase:
+ *  - SUPABASE_URL: np. "https://abcd.supabase.co"
+ *  - SUPABASE_ANON_KEY: klucz "anon"
+ * Zostaw puste, aby działał tryb DEMO (bez zapisu).
+ */
+window.CONFIG = {
+  SUPABASE_URL: "",
+  SUPABASE_ANON_KEY: ""
+};
