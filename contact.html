@@ -1,65 +1,193 @@
-<!doctype html><html lang="pl"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Dodaj kontakt — CRM Classic Light</title>
-<link rel="icon" href="/assets/logo.svg">
-<link rel="stylesheet" href="/assets/style.css">
-<script src="/js/contact-api.js" defer></script>
-</head><body>
-<header>
-  <div class="header-inner container">
-    <img src="/assets/logo.svg" alt="CRM SuperObozy"/>
-    <h1>CRM SuperObozy — Classic Light</h1>
-    <nav>
-      <a href="/contact.html">Dodaj kontakt</a>
-      <a href="/admin.html">Dashboard</a>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Nowy kontakt – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=11" />
+  <!-- Supabase UMD (global window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
+  <style>
+    :root{--br:#2b2f36;--muted:#9aa3af}
+    body{background:#0f172a;color:#e5e7eb}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
+    .btn{background:#1f2937;border:1px solid #374151;border-radius:12px;padding:10px 14px;color:#e5e7eb}
+    .btn:hover{filter:brightness(1.1)}
+    .btn-green{background:#065f46;border-color:#0f766e}
+    .btn-red{background:#7f1d1d;border-color:#991b1b}
+    .container{max-width:1024px;margin:0 auto;padding:18px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media(max-width:820px){.grid{grid-template-columns:1fr}}
+    input,select,textarea{background:#0b1220;border:1px solid #1f2937;border-radius:10px;color:#e5e7eb;padding:10px}
+    label{display:flex;flex-direction:column;gap:6px}
+    .mt{margin-top:14px}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{border:1px solid #334155;border-radius:999px;padding:6px 10px;cursor:pointer;background:#0b1220}
+    .chip.active{background:#064e3b;border-color:#10b981}
+    .grid-2{display:grid;grid-template-columns:3fr 2fr;gap:16px}
+    @media (max-width:1024px){.grid-2{grid-template-columns:1fr}}
+    .timeline{max-height:420px;overflow:auto;border:1px dashed #334155;border-radius:10px;padding:10px;background:#0b1220}
+    .subtle{color:#9aa3af}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>👤 Nowy kontakt</h1>
+    <p class="subtle">Zapisy, follow-up i szablony. Z prawej – timeline aktywności.</p>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+      <a class="btn" href="./leads.html">📋 Lista kontaktów</a>
+      <a class="btn" href="./followups.html">⏰ Follow‑ups</a>
     </nav>
-  </div>
-</header>
-<div class="container">
-  <div class="card">
-    <h2>Nowy kontakt</h2>
-    <form id="contactForm">
-      <div class="grid-2">
-        <div><label>Źródło</label><input name="source" placeholder="Formularz www"></div>
-        <div><label>Opiekun</label><input name="owner" value="Piotr"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Klub / Szkoła</label><input name="club" placeholder="np. UKS Judo"></div>
-        <div><label>Osoba</label><input name="person" placeholder="imię i nazwisko"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Telefon</label><input name="phone" placeholder="+48..."></div>
-        <div><label>E-mail</label><input name="email" value="kontakt@superosrodki.pl"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Dyscyplina</label><input name="discipline" placeholder="np. judo"></div>
-        <div><label>Uczestników</label><input name="participants" type="number" placeholder="np. 60"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Zaplecze</label><input name="facilities" placeholder="hala, boisko..."></div>
-        <div><label>Termin (okno)</label><input name="term" placeholder="lipiec 2026"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Lokalizacja preferowana</label><input name="location" placeholder="Dąbki / Rewal / Pobierowo"></div>
-        <div><label>Status</label><input name="status" value="Nowy"></div>
-      </div>
-      <div class="grid-2">
-        <div><label>Priorytet</label><input name="priority" value="Średni"></div>
-        <div>
-          <fieldset><legend>Zainteresowany campami:</legend>
-            <label><input type="checkbox" name="camps" value="Jastrowie"> Jastrowie</label>
-            <label><input type="checkbox" name="camps" value="Lipka"> Lipka</label>
-            <label><input type="checkbox" name="camps" value="Dąbki"> Dąbki</label>
-            <label><input type="checkbox" name="camps" value="Pobierowo"> Pobierowo</label>
-            <label><input type="checkbox" name="camps" value="Rewal"> Rewal</label>
-          </fieldset>
+  </header>
+
+  <main class="container mt grid-2">
+    <section>
+      <section class="card">
+        <form id="contact-form" class="grid">
+          <label>Źródło
+            <select name="source" id="source">
+              <option>Telefon</option><option>E-mail</option>
+              <option selected>Formularz www</option><option>Facebook</option>
+              <option>Instagram</option><option>Inne</option>
+            </select>
+          </label>
+          <label>Opiekun
+            <select name="owner" id="owner">
+              <option>Piotr</option><option>Anna</option><option>Kasia</option>
+            </select>
+          </label>
+
+          <label>Klub / Szkoła <input name="club" id="club" placeholder="np. UKS Orlik" required /></label>
+          <label>Osoba <input name="person" id="person" placeholder="np. Anna Kowalska" /></label>
+
+          <label>Telefon <input name="phone" id="phone" placeholder="+48 600 700 800" /></label>
+          <label>E-mail <input name="email" id="email" type="email" placeholder="kontakt@klub.pl" /></label>
+
+          <label>Dyscyplina <input name="discipline" id="discipline" placeholder="np. piłka nożna / judo" /></label>
+          <label>Uczestników <input name="participants" id="participants" type="number" min="1" placeholder="np. 45" /></label>
+
+          <label>Zaplecze <input name="facilities" id="facilities" placeholder="np. hala, boisko" /></label>
+          <label>Termin (okno) <input name="date_window" id="date_window" placeholder="np. 15–28 lipca" /></label>
+
+          <label style="grid-column:1/-1">Lokalizacja preferowana
+            <input name="pref_location" id="pref_location" placeholder="np. zachodniopomorskie / morze" />
+          </label>
+        </form>
+
+        <div class="mt">
+          <strong>Zainteresowany campami:</strong>
+          <div class="chips" id="camps">
+            <div class="chip" data-v="Jastrowie">Jastrowie</div>
+            <div class="chip" data-v="Lipka">Lipka</div>
+            <div class="chip" data-v="Dąbki">Dąbki</div>
+            <div class="chip" data-v="Pobierowo">Pobierowo</div>
+            <div class="chip" data-v="Rewal">Rewal</div>
+          </div>
         </div>
-      </div>
-      <label>Notatki</label>
-      <textarea name="notes" rows="3" placeholder="Dodatkowe info..."></textarea>
-      <p class="muted">Po zapisaniu kontaktu zobaczysz listę w zakładce <a href="/admin.html">Dashboard</a>.</p>
-      <button class="btn" id="saveContactBtn">💾 Zapisz kontakt</button>
-    </form>
-  </div>
-</div>
-</body></html>
+
+        <div class="grid mt">
+          <label>Status
+            <select id="status">
+              <option value="nowy" selected>Nowy</option>
+              <option value="w_trakcie">W trakcie</option>
+              <option value="oferta_wyslana">Oferta wysłana</option>
+              <option value="umowa">Umowa</option>
+              <option value="utracony">Utracony</option>
+            </select>
+          </label>
+          <label>Priorytet
+            <select id="priority">
+              <option>Niski</option><option selected>Średni</option><option>Wysoki</option>
+            </select>
+          </label>
+        </div>
+
+        <form class="grid mt" id="contact-meta">
+          <label style="grid-column:1/-1">Notatki
+            <textarea name="notes" id="notes" rows="4" placeholder="Dodatkowe informacje…"></textarea>
+          </label>
+          <label>Follow-up
+            <select name="follow_up" id="follow_up">
+              <option value="1">jutro</option><option value="3" selected>za 3 dni</option>
+              <option value="7">za tydzień</option><option value="14">za 2 tygodnie</option>
+            </select>
+          </label>
+          <label>Zgody (RODO)
+            <select id="consent">
+              <option value="brak" selected>Brak</option>
+              <option value="marketing">Marketing</option>
+              <option value="kontakt">Kontakt zwrotny</option>
+              <option value="wszystkie">Wszystkie</option>
+            </select>
+          </label>
+        </form>
+
+        <div class="toolbar mt">
+          <button class="btn" id="save-only" data-action="save-only">💾 Zapisz nowy kontakt</button>
+          <button class="btn btn-green" id="save-and-wa" data-action="save-and-wa">💬 Zapisz i otwórz WhatsApp</button>
+          <button class="btn" id="templates" data-action="templates">📄 Szablony wiadomości</button>
+          <button class="btn btn-red" id="reset" data-action="reset">🧹 Wyczyść</button>
+        </div>
+
+        <section class="card mt">
+          <h3>⚡ Szybkie wiadomości</h3>
+          <div class="toolbar mt">
+            <button class="btn" id="btn-sms" data-action="sms">📱 Kopiuj SMS</button>
+            <button class="btn" id="btn-email" data-action="email">✉️ Otwórz e‑mail</button>
+            <button class="btn" id="btn-wa" data-action="wa">🟩 Otwórz WhatsApp</button>
+          </div>
+          <p class="subtle mt">Teksty bazują na Twoich wzorcach. Uzupełnią się danymi z formularza.</p>
+          <pre id="preview" class="mono" style="white-space:pre-wrap;border:1px dashed #334155;border-radius:10px;padding:12px;margin-top:10px;background:#0b1220"></pre>
+        </section>
+      </section>
+
+      <aside>
+        <section class="card">
+          <h3>🕓 Timeline aktywności</h3>
+          <div id="timeline" class="timeline"></div>
+        </section>
+      </aside>
+    </section>
+  </main>
+
+  <dialog id="dlg" class="card" style="padding:0">
+    <div style="padding:14px;border-bottom:1px dashed #334155"><strong>📄 Szablony wiadomości</strong></div>
+    <div style="padding:14px">
+      <p class="subtle">Możesz edytować i zapisać jako domyślne (localStorage / konto przeglądarki).</p>
+      <label>SMS / Messenger
+        <textarea id="tpl-sms" rows="3">Dziękuję za kontakt! Proszę o liczbę osób, dyscyplinę i termin przyjazdu, żeby przygotować zaplecze sportowe i bazę noclegowo-żywieniową. Pozdrawiam, Piotr – SuperObozy.pl</textarea>
+      </label>
+      <div class="mt"></div>
+      <label>E-mail (temat)
+        <input id="tpl-mail-subj" value="Wstępna oferta obozu – SuperObozy.pl" />
+      </label>
+      <label>E-mail (treść)
+        <textarea id="tpl-mail-body" rows="8">Dzień dobry {PERSON},
+
+dziękuję za kontakt w sprawie obozu dla {CLUB}. Żeby dobrze dobrać obiekt i zaplecze, proszę o:
+• liczbę uczestników,
+• dyscyplinę / profil,
+• orientacyjny termin.
+
+Nasze ośrodki mają opinię PSP, halę/boiska w pobliżu i pełne wyżywienie.
+
+Pozdrawiam
+Piotr Gołąb
+SuperObozy.pl
+tel. 604 936 806
+        </textarea>
+      </label>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:flex-end;padding:14px;border-top:1px dashed #334155">
+      <button class="btn" id="dlg-cancel">Anuluj</button>
+      <button class="btn btn-green" id="dlg-save">Zapisz szablony</button>
+    </div>
+  </dialog>
+
+  <script src="./config.js"></script>
+  <script src="./app.js" defer></script>
+</body>
+</html>

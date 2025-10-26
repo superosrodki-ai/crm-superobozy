@@ -1,1 +1,57 @@
-<!DOCTYPE html><html lang='pl' data-theme='light'><head><meta charset='utf-8'/><meta name='viewport' content='width=device-width, initial-scale=1'/><title>Follow-ups</title><link rel='stylesheet' href='./styles.css'/><script src='https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2'></script></head><body><div class='shell'><div class='header'><div class='brand'>🌲 SuperObozy — <span style='color:var(--brand)'>CRM</span></div><div class='bar'><a class='btn ghost' href='./index.html' style='color:#334155'>← Powrót</a><a class='btn ghost' href='./contact.html' style='color:#334155'>➕ Nowy kontakt</a><a class='btn ghost' href='./leads.html' style='color:#334155'>📋 Leady</a></div></div><div class='page'><div class='card'><h3>⏰ Follow-ups</h3><div class='grid2'><section><h4>🔴 Zaległe <span id='c-over' class='mono muted'></span></h4><div id='overdue' style='border:1px solid var(--line);border-radius:12px;padding:10px;min-height:200px'></div></section><section><h4>🟡 Na dziś <span id='c-today' class='mono muted'></span></h4><div id='today' style='border:1px solid var(--line);border-radius:12px;padding:10px;min-height:200px'></div></section><section style='grid-column:1/-1'><h4>🟢 Nadchodzące <span id='c-next' class='mono muted'></span></h4><div id='next' style='border:1px solid var(--line);border-radius:12px;padding:10px;min-height:200px'></div></section></div></div></div></div><script src='./config.js'></script><script src='./followups.js' defer></script></body></html>
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Follow-ups – SuperObozy</title>
+  <link rel="stylesheet" href="./styles.css?v=11" />
+  <!-- Supabase UMD (global window.supabase) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.8/dist/umd/supabase.min.js"></script>
+  <style>
+    body{background:#0f172a;color:#e5e7eb}
+    .container{max-width:1100px;margin:0 auto;padding:18px}
+    .card{background:#111827;border:1px solid #1f2937;border-radius:14px;padding:14px}
+    .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+    @media(max-width:1024px){.cols{grid-template-columns:1fr}}
+    .list{border:1px solid #1f2937;border-radius:12px;padding:10px;background:#0b1220;min-height:220px}
+    .item{display:flex;justify-content:space-between;gap:10px;border-bottom:1px dashed #334155;padding:8px 4px}
+    .item:last-child{border-bottom:none}
+    .muted{color:#9aa3af}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace}
+    .nowrap{white-space:nowrap}
+    .btn{background:#1f2937;border:1px solid #374151;border-radius:10px;padding:8px 12px;color:#e5e7eb}
+    .btn-green{background:#065f46;border-color:#0f766e}
+  </style>
+</head>
+<body>
+  <header class="container">
+    <h1>⏰ Follow‑ups</h1>
+    <p class="muted">Zaległe, na dziś i nadchodzące. Odhaczaj „✔ zrobione”.</p>
+    <nav class="mt">
+      <a class="btn" href="./index.html">← Powrót</a>
+      <a class="btn" href="./contact.html">➕ Nowy kontakt</a>
+      <a class="btn" href="./leads.html">📋 Leady</a>
+    </nav>
+  </header>
+
+  <main class="container mt">
+    <div class="cols">
+      <section>
+        <h3>🔴 Zaległe <span id="c-over" class="mono muted"></span></h3>
+        <div id="overdue" class="list"></div>
+      </section>
+      <section>
+        <h3>🟡 Na dziś <span id="c-today" class="mono muted"></span></h3>
+        <div id="today" class="list"></div>
+      </section>
+      <section>
+        <h3>🟢 Nadchodzące <span id="c-next" class="mono muted"></span></h3>
+        <div id="next" class="list"></div>
+      </section>
+    </div>
+  </main>
+
+  <script src="./config.js"></script>
+  <script src="./followups.js" defer></script>
+</body>
+</html>
